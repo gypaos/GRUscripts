@@ -51,15 +51,16 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut)
    fDevOut  = _fDevOut;
 
    // instantiate detector objects
-   fMust2    = new TMust2();
-   fCATS     = new TCATS();
-   fExogam   = new TExogam();
-   fTrigger	 = new TTrigger();
-   fTac      = new TTac();
-   fPlastic  = new TPlastic();
-   fLise     = new TLise();
-   fTiaraHyball  = new TTiaraHyball();
-   fTiaraBarrel  = new TTiaraBarrel();
+   fMust2         = new TMust2();
+   fCATS          = new TCATS();
+   fExogam        = new TExogam();
+   fTrigger	      = new TTrigger();
+   fTac           = new TTac();
+   fPlastic       = new TPlastic();
+   fLise          = new TLise();
+   fTiaraHyball   = new TTiaraHyball();
+   fTiaraBarrel   = new TTiaraBarrel();
+   fCharissa      = new TCharissa();
 
    MySpectraList = GetSpectra();
 	cout << "Spectra done" << endl;  
@@ -79,6 +80,7 @@ GUser::~GUser()
    delete fLise;
    delete fTiaraHyball;
    delete fTiaraBarrel;
+   delete fCharissa;
 
 	gROOT->cd();
 }
@@ -155,6 +157,9 @@ void GUser::InitUserRun()
 	fTiaraBarrel->Init(GetEvent()->GetDataParameters());
    cout << "End Init Tiara/Barrel"<<endl;
 
+	fCharissa->Init(GetEvent()->GetDataParameters());
+   cout << "End Init Tiara/Barrel"<<endl;
+
    cout << "End Init run"<<endl;
 
 
@@ -194,6 +199,9 @@ void GUser::InitUserRun()
       else if(fTiaraBarrel->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {
          included = true;
       }
+      else if(fCharissa->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {
+         included = true;
+      }
 
       if (!included) {
          out_rej << i <<" "<<GetDataParameters()->GetParName(i)<<endl;
@@ -220,6 +228,7 @@ void GUser::User()
 	bool bTac          = false;
    bool bTiaraHyball  = false;
    bool bTiaraBarrel  = false;
+   bool bCharissa     = false;
 
    // clear objects
 	fMust2        -> Clear();
@@ -231,6 +240,7 @@ void GUser::User()
    fLise         -> Clear();
    fTiaraHyball  -> Clear();
    fTiaraBarrel  -> Clear();
+   fCharissa     -> Clear();
 
    //////////////////////////////////////////////////
 	//     Unpack events & fill raw data objects    //
@@ -264,13 +274,16 @@ void GUser::User()
       else if (fTiaraBarrel->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
 		  bTiaraBarrel = true;
 	   }
+      else if (fCharissa->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
+		  bCharissa = true;
+	   }
       else {
             //cout << "not a good label: "<<GetEventArrayLabelValue_Label(i)<<" value: "<<GetEventArrayLabelValue_Value(i)<<endl;
       }
    }
 
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//        Call BuildPhysicalEvent (physical treatment) for each declared detector in the e628.detector file     //
+	//        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
    fMyDetector->BuildSimplePhysicalEvent();
 }
@@ -313,6 +326,7 @@ void GUser::InitTTreeUser()
 	fLise         -> InitBranch(fTheTree);
    fTiaraHyball  -> InitBranch(fTheTree);
    fTiaraBarrel  -> InitBranch(fTheTree);
+   fCharissa     -> InitBranch(fTheTree);
 
    cout << "End GUser::InitTTreeUser()" << endl;
 }

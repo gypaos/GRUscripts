@@ -48,6 +48,7 @@
 #include "TLise.h"
 #include "TTiaraHyball.h"
 #include "TTiaraBarrel.h"
+#include "TCharissa.h"
 
 
 class GUser : public  GAcq
@@ -69,6 +70,7 @@ class GUser : public  GAcq
 	TLise         *fLise;
    TTiaraHyball  *fTiaraHyball;
    TTiaraBarrel  *fTiaraBarrel;
+   TCharissa     *fCharissa;
 
  private:
    DetectorManager   *fMyDetector;
