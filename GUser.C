@@ -29,6 +29,7 @@
 // NPTOOL headers
 #include "NPOptionManager.h"
 #include "TTiaraHyballPhysics.h"
+#include "TTiaraBarrelPhysics.h"
 #include "TMust2Physics.h"
 #include "TCATSPhysics.h"
 
@@ -119,6 +120,10 @@ void GUser::InitUser()
    ((TCATSPhysics*)        fMyDetector->GetDetector("CATS"))        -> SetRawDataPointer(fCATS        -> GetCATSData());
    ((TMust2Physics*)       fMyDetector->GetDetector("MUST2"))       -> SetRawDataPointer(fMust2       -> GetMust2Data());
    ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
+  ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
+
+
+
 }
 
 
@@ -158,7 +163,7 @@ void GUser::InitUserRun()
    cout << "End Init Tiara/Barrel"<<endl;
 
 	fCharissa->Init(GetEvent()->GetDataParameters());
-   cout << "End Init Tiara/Barrel"<<endl;
+   cout << "End Init Charissa/Barrel"<<endl;
 
    cout << "End Init run"<<endl;
 
