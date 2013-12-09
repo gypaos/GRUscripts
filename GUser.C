@@ -119,7 +119,7 @@ void GUser::InitUser()
    // need to be done detector by detector
    ((TCATSPhysics*)        fMyDetector->GetDetector("CATS"))        -> SetRawDataPointer(fCATS        -> GetCATSData());
    ((TMust2Physics*)       fMyDetector->GetDetector("MUST2"))       -> SetRawDataPointer(fMust2       -> GetMust2Data());
-   ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
+//   ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
 
 
@@ -163,7 +163,7 @@ void GUser::InitUserRun()
    cout << "End Init Tiara/Barrel"<<endl;
 
 	fCharissa->Init(GetEvent()->GetDataParameters());
-   cout << "End Init Charissa/Barrel"<<endl;
+   cout << "End Init Charissa"<<endl;
 
    cout << "End Init run"<<endl;
 
