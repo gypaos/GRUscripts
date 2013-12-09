@@ -21,7 +21,7 @@
    file->Rewind();
 
    // convert run
-   a->SetTTreeMode(3, "../e644_run/run_0005_test.root");
+   a->SetTTreeMode(3, "run_test.root");
    cout << "======== Debug START DoRun() =========" << endl;
    a->DoRun();
    cout << "======== Debug END DoRun() =========" << endl;

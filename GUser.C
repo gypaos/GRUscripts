@@ -119,13 +119,10 @@ void GUser::InitUser()
    // need to be done detector by detector
    ((TCATSPhysics*)        fMyDetector->GetDetector("CATS"))        -> SetRawDataPointer(fCATS        -> GetCATSData());
    ((TMust2Physics*)       fMyDetector->GetDetector("MUST2"))       -> SetRawDataPointer(fMust2       -> GetMust2Data());
-//   ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
+   ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
 
-
-
 }
-
 
 
 void GUser::InitUserRun()
@@ -274,10 +271,10 @@ void GUser::User()
 		  bTac = true;
 	   }
       else if (fTiaraHyball->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTiaraHyball = true;
+		  bTiaraHyball = true; 
 	   }
       else if (fTiaraBarrel->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTiaraBarrel = true;
+		  bTiaraBarrel = true; 
 	   }
       else if (fCharissa->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
 		  bCharissa = true;
