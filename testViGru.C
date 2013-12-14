@@ -7,7 +7,7 @@
    gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
 
    // open data file to read
-   GTape *file = new GTape("../e628_run/run_0026.dat.09Dec13_11h58m27s"); 
+   GTape *file = new GTape("../e628_run/run_1005.dat.13Dec13_17h38m10s"); 
 
    // define GUser
    GUser *a = new GUser(file);

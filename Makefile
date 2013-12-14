@@ -30,7 +30,7 @@ ROOTCFLAGS   := $(shell root-config --cflags) -I$(ROOTSYS)/xmlparser/inc -I$(ROO
 ROOTLIBS     := $(shell root-config --libs) -lHtml -lSpectrum
 ROOTGLIBS    := $(shell root-config --glibs)
 
-CXXFLAGS     += $(ROOTCFLAGS) $(GRUFLAGS) 
+CXXFLAGS     += -O3 $(ROOTCFLAGS) $(GRUFLAGS)  
 LIBS          = $(ROOTLIBS)  $(SYSLIBS)
 GLIBS         = $(ROOTGLIBS) $(SYSLIBS)
 

@@ -76,8 +76,8 @@ GUser::~GUser()
    delete fCATS;
    delete fExogam;
    delete fTrigger;
-	delete fTac;
-	delete fPlastic;
+	 delete fTac;
+	 delete fPlastic;
    delete fLise;
    delete fTiaraHyball;
    delete fTiaraBarrel;
@@ -97,7 +97,8 @@ void GUser::InitUser()
    // -GH for generating histos
    // -CH for checking histos
    // -C for calibration files
-   string argument = "-D ./detector.txt -GH -CH -C calibration.txt";
+  string argument = "-D ./detector.txt -GH -CH -C calibration.txt";
+ 
    NPOptionManager *myOptionManager = NPOptionManager::getInstance(argument);
    string detectorFile = myOptionManager->GetDetectorFile();
 
@@ -129,7 +130,6 @@ void GUser::InitUserRun()
 {
    // Initialisation for user treatemeant for each  run  
    // For specific user treatement
-
    cout << "Init run" << endl;
 
 	fMust2->Init(GetEvent()->GetDataParameters());
@@ -219,30 +219,18 @@ void GUser::InitUserRun()
 
 
 void GUser::User()
-{
-   // define boolean variables
-	bool bMust2        = false;
-	bool bCATS         = false;
-   bool bExogam       = false;
-	bool bTrigger      = false;
-	bool bPlastic      = false;
-	bool bLise         = false;
-	bool bTac          = false;
-   bool bTiaraHyball  = false;
-   bool bTiaraBarrel  = false;
-   bool bCharissa     = false;
-
+{ 
    // clear objects
 	fMust2        -> Clear();
 	fCATS         -> Clear();
-   fExogam       -> Clear();
-   fTrigger      -> Clear();
-   fTac          -> Clear();
-   fPlastic      -> Clear();
-   fLise         -> Clear();
-   fTiaraHyball  -> Clear();
-   fTiaraBarrel  -> Clear();
-   fCharissa     -> Clear();
+  fExogam       -> Clear();
+  fTrigger      -> Clear();
+  fTac          -> Clear();
+  fPlastic      -> Clear();
+  fLise         -> Clear();
+  fTiaraHyball  -> Clear();
+  fTiaraBarrel  -> Clear();
+  fCharissa     -> Clear();
 
    //////////////////////////////////////////////////
 	//     Unpack events & fill raw data objects    //
@@ -250,34 +238,24 @@ void GUser::User()
 	int size =  GetEventArrayLabelValueSize()/2;
 	for (Int_t i = 0; i < size; i++) {
 		if (fMust2->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bMust2 = true;  // indicate that physical treatment should be performed
 		}
       else if (fCATS->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bCATS = true;  // indicate that physical treatment should be performed
 		}
       else if (fExogam->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bExogam = true;  // indicate that physical treatment should be performed
 		}
       else if (fTrigger->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTrigger = true;
 	   }
       else if (fPlastic->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bPlastic = true;
 	   }
       else if (fLise->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bLise = true;
 	   }
       else if (fTac->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTac = true;
 	   }
       else if (fTiaraHyball->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTiaraHyball = true; 
 	   }
       else if (fTiaraBarrel->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bTiaraBarrel = true; 
 	   }
       else if (fCharissa->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
-		  bCharissa = true;
 	   }
       else {
             //cout << "not a good label: "<<GetEventArrayLabelValue_Label(i)<<" value: "<<GetEventArrayLabelValue_Value(i)<<endl;
@@ -287,8 +265,10 @@ void GUser::User()
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-   fMyDetector->BuildSimplePhysicalEvent();
+  fMyDetector->ClearEventPhysics();
+  fMyDetector->BuildSimplePhysicalEvent();
 }
+
 
 
 
@@ -321,14 +301,14 @@ void GUser::InitTTreeUser()
 
 	fMust2        -> InitBranch(fTheTree);
 	fCATS         -> InitBranch(fTheTree);
-   fExogam       -> InitBranch(fTheTree);
+  fExogam       -> InitBranch(fTheTree);
 	fTrigger      -> InitBranch(fTheTree);
 	fTac          -> InitBranch(fTheTree);
 	fPlastic      -> InitBranch(fTheTree);
 	fLise         -> InitBranch(fTheTree);
-   fTiaraHyball  -> InitBranch(fTheTree);
-   fTiaraBarrel  -> InitBranch(fTheTree);
-   fCharissa     -> InitBranch(fTheTree);
+  fTiaraHyball  -> InitBranch(fTheTree);
+  fTiaraBarrel  -> InitBranch(fTheTree);
+  fCharissa     -> InitBranch(fTheTree);
 
    cout << "End GUser::InitTTreeUser()" << endl;
 }

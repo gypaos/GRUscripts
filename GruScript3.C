@@ -26,7 +26,7 @@ void GruScript3(char* runname)
 
 				a->EventInit();
 				//a->SetSpectraMode(0);
-				a->SetUserMode(1);
+				a->InitUser(1);
 				file->Rewind();
 
 				a->SetTTreeMode(3, outname.c_str());
@@ -74,7 +74,7 @@ void Single(char* runname)
 
 				a->EventInit();
 				//a->SetSpectraMode(0);
-				a->SetUserMode(1);
+				a->InitUser(1);
 				file->Rewind();
 
 				a->SetTTreeMode(3, outname.c_str());
@@ -154,7 +154,7 @@ void Scale(char* runname)
 
 				a->EventInit();
 				//a->SetSpectraMode(0);
-				a->SetUserMode(1);
+				a->InitUser(1);
 				file->Rewind();
 
 				a->SetTTreeMode(0, outname.c_str());
@@ -203,7 +203,7 @@ void Control(char* runname)
 
 				a->EventInit();
 				//a->SetSpectraMode(0);
-				a->SetUserMode(1);
+				a->InitUser(1);
 				file->Rewind();
 
 				a->SetTTreeMode(1, outname.c_str());
