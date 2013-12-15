@@ -299,6 +299,9 @@ void GUser::InitTTreeUser()
 	cout << "GUser::InitTTreeUser()" << endl;
 	cout << "GUser::InitTTreeUser() -> fTheTree " << fTheTree << endl;
 
+	fTheTree->Branch("RunNumber",&fRunNumber,"RunNumber/I");
+	fTheTree->Branch("EvtNumber",&fEventCount,"EvtNumber/I");
+
 	fMust2        -> InitBranch(fTheTree);
 	fCATS         -> InitBranch(fTheTree);
   fExogam       -> InitBranch(fTheTree);
