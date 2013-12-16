@@ -94,3 +94,13 @@ TiaraBarrel
    Z= 0
    OuterBarrel= 1
    InnerBarrel= 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%      
+CharissaArray
+CharissaTelescope          
+X1_Y1=      10   -10 350
+X1_Y16= -10  -10 350
+X16_Y1= -10   10  350
+X16_Y16=  10 10  350
+
+ 
+
