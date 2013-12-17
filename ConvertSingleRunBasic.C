@@ -12,10 +12,9 @@
  
 //  GTape *file = new GTape("/scratch/gypaos/data/testCOFEE/raw/run_0002.dat.13Apr12_14h09m19s");
 //  GTape *file = new GTape("/scratch/gypaos/GanilData/e530/run/run_0363.dat.20Apr09_11h20m41s");
-//  GTape *file = new GTape("/scratch/gypaos/GanilData/e628/run_0005.dat.03Dec13_11h11m11s");
-//  GTape *file = new GTape("/scratch/gypaos/GanilData/e628/run_0075.dat.04Dec13_17h57m55s");
 //  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_0035.dat.10Dec13_20h43m26s.2");
-  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1007.dat.13Dec13_20h17m15s.10");
+  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1028.dat.17Dec13_09h30m43s");
+//  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1022.dat.16Dec13_19h21m07s");
   file->Open();
 
   string input_file(file->GetDeviceName());
@@ -29,7 +28,8 @@
   
 //  a->SetTTreeMode(1, "/scratch/gypaos/data/testCOFEE/root/run_0002_test.root");
 //  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_0035_2.root");
-  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_1007_10.root");
+  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_1028.root");
+//  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_1022.root");
   cout << "======== Debug START DoRun() =========" << endl;
   a->SetRunNumber(runnumber);
   a->DoRun();
@@ -38,7 +38,8 @@
   
 //  file->Close();
   a->EndUser();                       // must be explicitly called , if it needs
-  a->SpeSave("hist_1007_10.root");   // save all declared histogram 
+  a->SpeSave("run_1028.root");   // save all declared histogram 
+  //a->SpeSave("./matchsticks/hyball-sectors_matchsticks.root");
 //  delete (a);                         // finish 
 
   // gROOT->ProcessLine(".q");
