@@ -11,4 +11,6 @@ CalibrationFilePath
    calib/Cal_Str_Y_E_MM2.cal
    calib/Cal_Str_Y_E_MM3.cal
    calib/Cal_Str_Y_E_MM4.cal
+%   calib/BarrelCalib.txt
+   calib/BarrelMatchsticks.txt
 

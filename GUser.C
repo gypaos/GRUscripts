@@ -32,6 +32,7 @@
 #include "TTiaraBarrelPhysics.h"
 #include "TMust2Physics.h"
 #include "TCATSPhysics.h"
+#include "TCharissaPhysics.h"
 
 // C++ headers
 #include <iostream>
@@ -122,6 +123,7 @@ void GUser::InitUser()
    ((TMust2Physics*)       fMyDetector->GetDetector("MUST2"))       -> SetRawDataPointer(fMust2       -> GetMust2Data());
    ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
+  ((TCharissaPhysics*) fMyDetector->GetDetector("Charissa")) -> SetRawDataPointer(fCharissa-> GetCharissaData());
 
 }
 
