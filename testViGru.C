@@ -7,7 +7,9 @@
    gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
 
    // open data file to read
-   GTape *file = new GTape("../e628_run/run_1005.dat.13Dec13_17h38m10s"); 
+ //  GTape *file = new GTape("../e628_run/run_1005.dat.13Dec13_17h38m10s"); 
+//     GTape *file = new GTape("../e628_run/run_1007.dat.13Dec13_20h17m15s");
+   GTape *file = new GTape("../e628_run/run_1038.dat.19Dec13_00h56m55s"); 
 
    // define GUser
    GUser *a = new GUser(file);
@@ -23,7 +25,7 @@
    // convert run
    a->SetTTreeMode(3, "run_test.root");
    cout << "======== Debug START DoRun() =========" << endl;
-   a->DoRun(100000);
+   a->DoRun(10000);
    cout << "======== Debug END DoRun() =========" << endl;
 
 //   file->Close();
