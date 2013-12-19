@@ -25,7 +25,7 @@
    // convert run
    a->SetTTreeMode(3, "run_test.root");
    cout << "======== Debug START DoRun() =========" << endl;
-   a->DoRun(10000);
+   a->DoRun();
    cout << "======== Debug END DoRun() =========" << endl;
 
 //   file->Close();
