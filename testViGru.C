@@ -9,7 +9,7 @@
    // open data file to read
  //  GTape *file = new GTape("../e628_run/run_1005.dat.13Dec13_17h38m10s"); 
 //     GTape *file = new GTape("../e628_run/run_1007.dat.13Dec13_20h17m15s");
-   GTape *file = new GTape("../e628_run/run_1038.dat.19Dec13_00h56m55s"); 
+   GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
 
    // define GUser
    GUser *a = new GUser(file);

@@ -40,10 +40,10 @@ ConfigCATS
 % BAR3 : for barycentric method with 3 points
 % BAR4 : for barycentric method with 4 points
 % BAR5 : for barycentric method with 5 points
-	RECONSTRUCTION_METHOD CATS1X BAR5
-	RECONSTRUCTION_METHOD CATS1Y BAR5
-  RECONSTRUCTION_METHOD CATS2X BAR5
-  RECONSTRUCTION_METHOD CATS2Y BAR5
+	RECONSTRUCTION_METHOD CATS1X SECHS
+	RECONSTRUCTION_METHOD CATS1Y SECHS
+  RECONSTRUCTION_METHOD CATS2X SECHS
+  RvECONSTRUCTION_METHOD CATS2Y SECHS
 
 % CORRECTION (Correction3Points or Correction4Points : depends on the reconstruction method)
 % use Correction3Points for GAUSS, SECH or BAR3
