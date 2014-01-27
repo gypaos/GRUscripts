@@ -5,17 +5,10 @@
   
   TString GRUpath = gSystem->Getenv("GRUDIR");
   gROOT->ProcessLine(Form(".include %s/include", GRUpath.Data()));
-  //  gROOT->ProcessLine(".L ./GUser_convert.C++O"); // load and compile GUser class
-  //  gROOT->ProcessLine(".L ./GUser_convert_C.so"); // load and compile GUser class
   gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class
                                          //  gSystem->Load("./GUser_convert_C.so"); // load and compile GUser class
   
-  //  GTape *file = new GTape("/scratch/gypaos/data/testCOFEE/raw/run_0002.dat.13Apr12_14h09m19s");
-  //  GTape *file = new GTape("/scratch/gypaos/GanilData/e530/run/run_0363.dat.20Apr09_11h20m41s");
-  //  GTape *file = new GTape("/scratch/gypaos/GanilData/e628/run_0005.dat.03Dec13_11h11m11s");
-  //  GTape *file = new GTape("/scratch/gypaos/GanilData/e628/run_0075.dat.04Dec13_17h57m55s");
-  //  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_0035.dat.10Dec13_20h43m26s.2");
-  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1007.dat.13Dec13_20h17m15s.10");
+  GTape *file = new GTape("../e628_run/run_1020.dat.16Dec13_18h43m51s");
   file->Open();
   
   string input_file(file->GetDeviceName());
@@ -29,7 +22,7 @@
   
   //  a->SetTTreeMode(1, "/scratch/gypaos/data/testCOFEE/root/run_0002_test.root");
   //  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_0035_2.root");
-  a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_1007_10.root");
+  a->SetTTreeMode(3, "run_1020.root");
   cout << "======== Debug START DoRun() =========" << endl;
   a->SetRunNumber(runnumber);
   a->DoRun();
@@ -38,7 +31,7 @@
   
   //  file->Close();
   a->EndUser();                       // must be explicitly called , if it needs
-  a->SpeSave("hist_1007_10.root");   // save all declared histogram
+ // a->SpeSave("hist_1007.root");   // save all declared histogram
                                      //  delete (a);                         // finish
   
   // gROOT->ProcessLine(".q");

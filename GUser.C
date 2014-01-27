@@ -38,6 +38,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <map>
 using namespace std;
 
 
@@ -98,7 +99,7 @@ void GUser::InitUser()
    // -GH for generating histos
    // -CH for checking histos
    // -C for calibration files
-  string argument = "-D ./detector.txt -GH -CH -C calibration.txt";
+  string argument = "-D ./detector.txt  -C calibration.txt -GH";
  
    NPOptionManager *myOptionManager = NPOptionManager::getInstance(argument);
    string detectorFile = myOptionManager->GetDetectorFile();
@@ -133,8 +134,8 @@ void GUser::InitUserRun()
    // Initialisation for user treatemeant for each  run  
    // For specific user treatement
    cout << "Init run" << endl;
-
-	fMust2->Init(GetEvent()->GetDataParameters());
+	
+  fMust2->Init(GetEvent()->GetDataParameters());
 	cout << "End Init Must2"<<endl;
 
 	fCATS->Init(GetEvent()->GetDataParameters());
@@ -237,8 +238,13 @@ void GUser::User()
    //////////////////////////////////////////////////
 	//     Unpack events & fill raw data objects    //
    //////////////////////////////////////////////////
-	int size =  GetEventArrayLabelValueSize()/2;
-	for (Int_t i = 0; i < size; i++) {
+
+map<int,int> label_rec;
+	int mySize =  GetEventArrayLabelValueSize()/2;
+	for (Int_t i = 0; i < mySize; i++) {
+
+   label_rec[GetEventArrayLabelValue_Label(i)]+=1;
+    
 		if (fMust2->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
 		}
       else if (fCATS->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {
@@ -263,12 +269,30 @@ void GUser::User()
             //cout << "not a good label: "<<GetEventArrayLabelValue_Label(i)<<" value: "<<GetEventArrayLabelValue_Value(i)<<endl;
       }
    }
+/*
+bool trig= false;
+map<int,int>::iterator it ;
+for(it=label_rec.begin();it!=label_rec.end();++it)
+   if(it->second>1&&it->first!=0) trig=true;
 
+if(trig){
+   int ll = 0;
+   cout << endl << "Wrong label" << endl ; 
+  for(it=label_rec.begin();it!=label_rec.end();++it){
+       if(it->second>1){ll++; cout << it->first  << " " << it->second <<"|" ;}
+       if(ll%10==0)cout << endl ;
+    }
+cout <<endl <<  "///////////////////////////////////" << endl; 
+ 	for (Int_t i = 0; i < mySize; i++) {
+    cout << GetEventArrayLabelValue_Label(i) << " "  ;
+    if(i%20==0&&i!=0) cout << endl ;
+  }
+}
+*/
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   fMyDetector->BuildSimplePhysicalEvent();
-
 }
 
 

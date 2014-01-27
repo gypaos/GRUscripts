@@ -1,38 +1,48 @@
 {
-   gROOT->Reset();
+  gROOT->Reset();
 
-   // load GUser
-   TString GRUpath = gSystem->Getenv("GRUDIR");
-   gROOT->ProcessLine(Form(".include %s/include", GRUpath.Data()));
-   gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
+  // load GUser
+  TString GRUpath = gSystem->Getenv("GRUDIR");
+  gROOT->ProcessLine(Form(".include %s/include", GRUpath.Data()));
+  gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
 
-   // open data file to read
-//   GTape *file = new GTape("../e628_run/run_1005.dat.13Dec13_17h38m10s"); 
-//     GTape *file = new GTape("../e628_run/run_1007.dat.13Dec13_20h17m15s");
-//   GTape *file = new GTape("../e628_run/run_1070.dat.19Dec13_12h29m00s");
-   GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+  // open data file to read
+//  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+// GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
+// GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
+ 
+  GTape *file = new GTape("../e628_run/run_1115.dat.20Dec13_00h38m48s");
 
-   // define GUser
-   GUser *a = new GUser(file);
-   // define GNetServerRoot to be able to connect vigru
-   GNetServerRoot *serv = new GNetServerRoot(9090, a);
-   a->EventInit();
-   a->SetSpectraMode(1);
-   a->SetUserMode(1);
-   // start spectra server for vigru
-   serv->StartServer();
-   file->Rewind();
+ file->Open();
+  file->Rewind();
+  // define GUser
+  GUser *a = new GUser(file);
+  a->InitUser();
+  a->EventInit();
+  a->InitUserRun();
+  a->SetTTreeMode(3, "run_test.root");
+  // Set compression of the Output File
+  // 0 extremely large file, no CPU use, high I/O latency so bad perf
+  // 1 minimum compression, low on CPU (Recommanded by ROOT)
+  // 2-9 bigger and bigger CPU load, smaller file
+  a->SetCompressionLevel(1);
 
-   // convert run
-   a->SetTTreeMode(3, "run_test.root");
-   cout << "======== Debug START DoRun() =========" << endl;
-   a->DoRun(10000);
-   cout << "======== Debug END DoRun() =========" << endl;
+  // define GNetServerRoot to be able to connect vigru
+//  GNetServerRoot *serv = new GNetServerRoot(9090, a);
+//  serv->StartServer();
+ 
+  
+  // Convert  Run //
+  a->DoRun();
+  
+  // Close every thing, save spectra // 
+  file->Close();
+  a->EndUser();              
+//  a->SpeSave("histo.root");
+  //serv->StopServer();
 
-//   file->Close();
-//   a->EndUser();                       // must be explicitly called , if it needs
- a->SpeSave("histo.root");   // save all declared histogram 
-//   delete (a);                         // finish 
-
-   // gROOT->ProcessLine(".q");
+  // Delete all object // 
+  delete a;
+  //delete serv;  
+  delete file;                        
 }

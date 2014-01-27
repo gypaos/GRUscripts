@@ -44,7 +44,7 @@ $(CLASSNAME)_C.so: $(CLASSNAME).o   $(CLASSNAME)Dict.o
 
 $(CLASSNAME)Dict.C:	$(CLASSNAME).h
 			@echo "Generating dictionary $@..."
-			rootcint -f $@ -c -p $(GRUFLAGS) $(INCLIST) $^ $(CLASSNAME)LinkDef.h
+			rootcint -f $@ -c -p -O0 $(GRUFLAGS) $(INCLIST) $^ $(CLASSNAME)LinkDef.h
 
 
 clean:
