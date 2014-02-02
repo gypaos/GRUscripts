@@ -11,7 +11,7 @@
 // GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-  GTape *file = new GTape("../e628_run/run_1115.dat.20Dec13_00h38m48s");
+  GTape *file = new GTape("../e628_run/run_1177.dat.23Dec13_01h26m32s");
 
  file->Open();
   file->Rewind();
@@ -33,16 +33,16 @@
  
   
   // Convert  Run //
-  a->DoRun();
+  a->DoRun(1000);
   
   // Close every thing, save spectra // 
   file->Close();
   a->EndUser();              
-//  a->SpeSave("histo.root");
+  a->SpeSave("histo.root");
   //serv->StopServer();
 
   // Delete all object // 
   delete a;
   //delete serv;  
-  delete file;                        
+//  delete file;                        
 }

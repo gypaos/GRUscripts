@@ -14,5 +14,5 @@ CalibrationFilePath
    calib/BarrelCalib.txt
    calib/BarrelMatchsticks.txt
    calib/BarrelBallistic.txt
-   calib/Charissa.txt
+   calib/CharissaMatchstick.txt
 
