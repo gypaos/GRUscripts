@@ -1,30 +1,41 @@
-// This macro converts a single run producing a ROOT output file
-// with user class format
 {
-  gROOT->Reset(); 
-  
+  gROOT->Reset();
+
+  // load GUser
   TString GRUpath = gSystem->Getenv("GRUDIR");
   gROOT->ProcessLine(Form(".include %s/include", GRUpath.Data()));
-  gROOT->ProcessLine(".L ./GUser_convert.C++O"); // load and compile GUser class 
+  gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
+
+  // open data file to read
+  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+// GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
+// GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-//  GTape *file = new GTape("./run_0220.dat.15Apr09_04h32m35s");
-  GTape *file = new GTape("./run_54.dat.08Sep10_14h10m19s");
-  file->Open();
+  GTape *file = new GTape("../e628_run/run_1177.dat.23Dec13_01h26m32s");
 
-  GUser * a= new GUser(file); 
-  a->EventInit();
-  a->SetSpectraMode(1); 
-  a->SetUserMode(1);
+ file->Open();
   file->Rewind();
-  
-  a->SetTTreeMode(3, "./test.root");
-  cout << "======== Debug START DoRun() =========" << endl;
-  a->DoRun();
-  cout << "======== Debug END DoRun() =========" << endl;
-  
-  file->Close();
-  a->EndUser();                       // must be explicitly called , if it needs
-  delete (a);                         // finish 
+  // define GUser
+  GUser *a = new GUser(file);
+  a->InitUser();
+  a->EventInit();
+  a->InitUserRun();
+  a->SetTTreeMode(3, "run_test.root");
+  // Set compression of the Output File
+  // 0 extremely large file, no CPU use, high I/O latency so bad perf
+  // 1 minimum compression, low on CPU (Recommanded by ROOT)
+  // 2-9 bigger and bigger CPU load, smaller file
+  a->SetCompressionLevel(1);
 
-  // gROOT->ProcessLine(".q");
+  // Convert  Run //
+  a->DoRun(10000);
+  
+  // Close every thing, save spectra // 
+  file->Close();
+  a->EndUser();              
+  a->SpeSave("histo.root");
+
+  // Delete all object // 
+  delete a;
+  delete file;                        
 }
