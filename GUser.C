@@ -63,6 +63,34 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   fTiaraBarrel   = new TTiaraBarrel();
   fCharissa      = new TCharissa();
 
+  fNPToolArgument = "";
+
+  MySpectraList = GetSpectra();
+  cout << "Spectra done" << endl;  
+}
+
+GUser::GUser (GDevice* _fDevIn, string NPToolArgument){ 
+  // Constructor/initialisator of Acquisition object 
+  // entry:
+  // - Input Device
+  // - Output Device
+  fDevIn   = _fDevIn;
+  fDevOut  = NULL;
+
+  // instantiate detector objects
+  fMust2         = new TMust2();
+  fCATS          = new TCATS();
+  fExogam        = new TExogam();
+  fTrigger	     = new TTrigger();
+  fTac           = new TTac();
+  fPlastic       = new TPlastic();
+  fLise          = new TLise();
+  fTiaraHyball   = new TTiaraHyball();
+  fTiaraBarrel   = new TTiaraBarrel();
+  fCharissa      = new TCharissa();
+
+  fNPToolArgument = NPToolArgument;
+
   MySpectraList = GetSpectra();
   cout << "Spectra done" << endl;  
 }
@@ -98,8 +126,7 @@ void GUser::InitUser(){
   // -CH for checking histos
   // -C for calibration files
   // -O for outputting the Physical Tree (followed by its name)
-  string argument = "-D ./detector.txt  -C calibration.txt -GH -O testGRU";
-  NPOptionManager *myOptionManager = NPOptionManager::getInstance(argument);
+  NPOptionManager *myOptionManager = NPOptionManager::getInstance(fNPToolArgument);
 
   string detectorFile = myOptionManager->GetDetectorFile();
   string OutputfileName      = myOptionManager->GetOutputFile();
@@ -242,7 +269,7 @@ void GUser::User(){
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  fMyDetector->BuildSimplePhysicalEvent();
+  fMyDetector->BuildPhysicalEvent();
 
   // Fill the Physics Tree
   RootOutput::getInstance()->GetTree()->Fill(); 

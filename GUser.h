@@ -63,21 +63,24 @@ class GUser : public  GAcq
  private:
 	TMust2        *fMust2;
 	TCATS	        *fCATS;
-   TExogam       *fExogam;
+  TExogam       *fExogam;
 	TTrigger      *fTrigger;
 	TTac          *fTac;
 	TPlastic      *fPlastic;
 	TLise         *fLise;
-   TTiaraHyball  *fTiaraHyball;
-   TTiaraBarrel  *fTiaraBarrel;
-   TCharissa     *fCharissa;
+  TTiaraHyball  *fTiaraHyball;
+  TTiaraBarrel  *fTiaraBarrel;
+  TCharissa     *fCharissa;
+
+  string fNPToolArgument;
 
  private:
    DetectorManager   *fMyDetector;
 
  public:
    GUser(GDevice* _fDevIn= NULL, GDevice* _fDevOut= NULL);  // default constructor of GUser object 
-   ~GUser();                                                // destructor of GUser object 
+   GUser(GDevice* _fDevIn, string NPToolOption);  // NPTool specific constructor 
+   ~GUser();// destructor of GUser object 
 
    virtual void InitUser();
    virtual void InitUserRun();

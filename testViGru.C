@@ -7,16 +7,17 @@
   gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class 
 
   // open data file to read
-//  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+//  GTape *file = new GTape("../e628_run/run_1064.dat.19Dec13_09h17m14s"); 
+  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
 // GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-  GTape *file = new GTape("../e628_run/run_1177.dat.23Dec13_01h26m32s");
+//  GTape *file = new GTape("../e628_run/run_1127.dat.20Dec13_15h25m33s");
 
  file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file);
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU2");
   a->InitUser();
   a->EventInit();
   a->InitUserRun();
@@ -33,7 +34,7 @@
  
   
   // Convert  Run //
-  a->DoRun(1000);
+  a->DoRun();
   
   // Close every thing, save spectra // 
   file->Close();
