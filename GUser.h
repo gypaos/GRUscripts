@@ -39,6 +39,7 @@
 
 // Ganil2Root headers
 #include "TDetector.h"
+#include "TModularLabel.h"
 #include "TMust2.h"
 #include "TCATS.h"
 #include "TExogam.h"
@@ -50,7 +51,6 @@
 #include "TTiaraBarrel.h"
 #include "TCharissa.h"
 
-
 class GUser : public  GAcq
 {
  protected:
@@ -61,7 +61,8 @@ class GUser : public  GAcq
 	GNetServerRoot*   MySpectraServer;
     
  private:
-	TMust2        *fMust2;
+	TModularLabel *fModularLabel;
+  TMust2        *fMust2;
 	TCATS	        *fCATS;
   TExogam       *fExogam;
 	TTrigger      *fTrigger;

@@ -34,7 +34,7 @@
  
   
   // Convert  Run //
-  a->DoRun();
+  a->DoRun(1000);
   
   // Close every thing, save spectra // 
   file->Close();

@@ -4,12 +4,10 @@ ConfigCATS
 
 % RECONSTRUCTION METHOD
 % 5 recosntructions are available :
-% FSECHS : for fitted hyperbolic secante method (3 points)
-% ASECHS : for analytic hyperbolic secante method (3 points)
-% AGAUSS : for analytic Gaussian method (3 points)
-% BAR3 : for barycentric method with 3 points
-% BAR4 : for barycentric method with 4 points
-% BAR5 : for barycentric method with 5 points
+% FSECH : for fitted hyperbolic secante method 
+% ASECH : for analytic hyperbolic secante method
+% AGAUSS : for analytic Gaussian method
+% CENTROIDE : for a simple centroide method
   RECONSTRUCTION_METHOD CATS1X FSECH
   RECONSTRUCTION_METHOD CATS1Y FSECH
   RECONSTRUCTION_METHOD CATS2X FSECH

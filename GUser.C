@@ -42,7 +42,7 @@ using namespace std;
 
 
 ClassImp (GUser); 
-
+////////////////////////////////////////////////////////////////////////////////
 GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){ 
   // Constructor/initialisator of Acquisition object 
   // entry:
@@ -52,10 +52,11 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   fDevOut  = _fDevOut;
 
   // instantiate detector objects
+  fModularLabel  = new TModularLabel();
   fMust2         = new TMust2();
   fCATS          = new TCATS();
   fExogam        = new TExogam();
-  fTrigger	      = new TTrigger();
+  fTrigger	     = new TTrigger();
   fTac           = new TTac();
   fPlastic       = new TPlastic();
   fLise          = new TLise();
@@ -68,7 +69,7 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   MySpectraList = GetSpectra();
   cout << "Spectra done" << endl;  
 }
-
+////////////////////////////////////////////////////////////////////////////////
 GUser::GUser (GDevice* _fDevIn, string NPToolArgument){ 
   // Constructor/initialisator of Acquisition object 
   // entry:
@@ -78,6 +79,7 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   fDevOut  = NULL;
 
   // instantiate detector objects
+  fModularLabel  = new TModularLabel();
   fMust2         = new TMust2();
   fCATS          = new TCATS();
   fExogam        = new TExogam();
@@ -94,9 +96,7 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   MySpectraList = GetSpectra();
   cout << "Spectra done" << endl;  
 }
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 GUser::~GUser()  {
   // Destructor of class GUser
   delete fMust2;
@@ -114,9 +114,7 @@ GUser::~GUser()  {
   RootOutput::getInstance()->Destroy();
 
 }
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUser(){
   // Initialisation for global  user treatement
 
@@ -154,12 +152,14 @@ void GUser::InitUser(){
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
   ((TCharissaPhysics*)    fMyDetector->GetDetector("Charissa"))    -> SetRawDataPointer(fCharissa    -> GetCharissaData());
 }
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUserRun(){
   // Initialisation for user treatemeant for each  run  
   // For specific user treatement
   cout << "Init run" << endl;
+  fModularLabel->LoadLabel("ModularLabel.txt");
+  fModularLabel->Init(GetEvent()->GetDataParameters());
+  cout << "End Init ModularLabel" << endl ;
   fMust2->Init(GetEvent()->GetDataParameters());
   cout << "End Init Must2"<<endl;
   fCATS->Init(GetEvent()->GetDataParameters());
@@ -186,22 +186,23 @@ void GUser::InitUserRun(){
   ofstream out_rej,out_acc;
   out_acc.open("label_accepted.dat");
   out_rej.open("label_rejected.dat");
-
-  for (Int_t i = 0; i < GetEventArraySize(); i++) {
+  // Simulate an event loop with all label and value 0
+  for (Int_t i = 0; i < GetEvent()->GetDataParameters()->GetNbParameters(); i++) {
     bool included = true;
 
-    if (fMust2->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)){}
-    else if (fCATS->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if (fExogam->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTac->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTrigger->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fLise->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fPlastic->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTiaraHyball->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTiaraBarrel->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fCharissa->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
+         if (fModularLabel    ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fMust2           ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fCATS            ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fExogam          ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fTrigger         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fPlastic         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fLise            ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {} 
+    else if (fTac             ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fTiaraHyball     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fTiaraBarrel     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    else if (fCharissa        ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else included = false;
-   
+ 
     if (!included) 
       out_rej << i <<" "<<GetDataParameters()->GetParName(i)<<endl;
     else 
@@ -211,11 +212,10 @@ void GUser::InitUserRun(){
   out_rej.close();
   out_acc.close();
 }
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::User(){ 
   // clear objects
+  fModularLabel -> Clear();
   fMust2        -> Clear();
   fCATS         -> Clear();
   fExogam       -> Clear();
@@ -231,41 +231,21 @@ void GUser::User(){
   //     Unpack events & fill raw data objects    //
   //////////////////////////////////////////////////
 
-  map<int,int> label_rec;
   int mySize =  GetEventArrayLabelValueSize()/2;
   for (Int_t i = 0; i < mySize; i++) {
-    label_rec[GetEventArrayLabelValue_Label(i)]+=1;
-    if (fMust2->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fCATS->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fExogam->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTrigger->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fPlastic->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fLise->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))){} 
-    else if (fTac->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTiaraHyball->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTiaraBarrel->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fCharissa->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+         if (fModularLabel  ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fMust2         ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fCATS          ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fExogam        ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fTrigger       ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fPlastic       ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fLise          ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {} 
+    else if (fTac           ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fTiaraHyball   ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fTiaraBarrel   ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fCharissa      ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
   }
-  /*
-     bool trig= false;
-     map<int,int>::iterator it ;
-     for(it=label_rec.begin();it!=label_rec.end();++it)
-     if(it->second>1&&it->first!=0) trig=true;
-
-     if(trig){
-     int ll = 0;
-     cout << endl << "Wrong label" << endl ; 
-     for(it=label_rec.begin();it!=label_rec.end();++it){
-     if(it->second>1){ll++; cout << it->first  << " " << it->second <<"|" ;}
-     if(ll%10==0)cout << endl ;
-     }
-     cout <<endl <<  "///////////////////////////////////" << endl; 
-     for (Int_t i = 0; i < mySize; i++) {
-     cout << GetEventArrayLabelValue_Label(i) << " "  ;
-     if(i%20==0&&i!=0) cout << endl ;
-     }
-     }
-     */
+  
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -273,20 +253,14 @@ void GUser::User(){
 
   // Fill the Physics Tree
   RootOutput::getInstance()->GetTree()->Fill(); 
-
-
 }
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUserRun(){
   //  end of run ,  executed a end of each run
   cout <<"--------------< End User Run >------------------\n";
 
 }
-
-//______________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUser(){
   // globlal final end executed a end of runs
   // must be explicitly called! 
@@ -297,15 +271,15 @@ void GUser::EndUser(){
   //cout << "End save spectra " << endl;    
 
 }
-//______________________________________________________________________________
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::InitTTreeUser(){
   cout << "GUser::InitTTreeUser()" << endl;
   cout << "GUser::InitTTreeUser() -> fTheTree " << fTheTree << endl;
 
   fTheTree->Branch("RunNumber",&fRunNumber,"RunNumber/I");
   fTheTree->Branch("EvtNumber",&fEventCount,"EvtNumber/I");
-
+  
+  fModularLabel -> InitBranch(fTheTree);
   fMust2        -> InitBranch(fTheTree);
   fCATS         -> InitBranch(fTheTree);
   fExogam       -> InitBranch(fTheTree);
