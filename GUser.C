@@ -151,6 +151,25 @@ void GUser::InitUser(){
   ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
   ((TCharissaPhysics*)    fMyDetector->GetDetector("Charissa"))    -> SetRawDataPointer(fCharissa    -> GetCharissaData());
+
+
+
+  // Add correlation Spectra
+  int NBins = 16384/8;
+  int MinBin = 0;
+  int MaxBin = 16384;
+  TH2F* MUST_CATS = new TH2F("MUST_CATS","MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_CATS,"Correlation");
+
+  TH2F* MUST_TIARA = new TH2F("MUST_TIARA","MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_TIARA,"Correlation");
+
+  TH2F* MUST_CHARISSA = new TH2F("MUST_CHARISSA","MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_CHARISSA,"Correlation");
+
+  TH2F* MUST_EXO = new TH2F("MUST_EXO","MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_EXO,"Correlation");
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUserRun(){
@@ -190,7 +209,7 @@ void GUser::InitUserRun(){
   for (Int_t i = 0; i < GetEvent()->GetDataParameters()->GetNbParameters(); i++) {
     bool included = true;
 
-         if (fModularLabel    ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
+    if (fModularLabel         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else if (fMust2           ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else if (fCATS            ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else if (fExogam          ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
@@ -202,7 +221,7 @@ void GUser::InitUserRun(){
     else if (fTiaraBarrel     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else if (fCharissa        ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
     else included = false;
- 
+
     if (!included) 
       out_rej << i <<" "<<GetDataParameters()->GetParName(i)<<endl;
     else 
@@ -245,14 +264,31 @@ void GUser::User(){
     else if (fTiaraBarrel   ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
     else if (fCharissa      ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
   }
-  
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   fMyDetector->BuildPhysicalEvent();
-
   // Fill the Physics Tree
   RootOutput::getInstance()->GetTree()->Fill(); 
+
+  /////////////////////////////////////////////////////////////////////////////
+  // Fill the Correlation Histo
+  short must = fModularLabel->GetValue("EXO_MUST");
+  short exogam = fModularLabel->GetValue("EXO_EXO");
+  short cats = fModularLabel->GetValue("EXO_CATS");
+  short tiara = fModularLabel->GetValue("EXO_TIARA");
+  short charissa = fModularLabel->GetValue("EXO_CHARISSA");
+
+  // Add correlation Spectra
+  int NBins = 4000;
+  int MinBin = 0;
+  int MaxBin = 16384;
+  GetSpectra()->GetHisto("MUST_CATS")->Fill(must,cats);
+  GetSpectra()->GetHisto("MUST_TIARA")->Fill(must,tiara);
+  GetSpectra()->GetHisto("MUST_CHARISSA")->Fill(must,charissa);
+  GetSpectra()->GetHisto("MUST_EXO")->Fill(must,exogam);
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUserRun(){
@@ -278,7 +314,7 @@ void GUser::InitTTreeUser(){
 
   fTheTree->Branch("RunNumber",&fRunNumber,"RunNumber/I");
   fTheTree->Branch("EvtNumber",&fEventCount,"EvtNumber/I");
-  
+
   fModularLabel -> InitBranch(fTheTree);
   fMust2        -> InitBranch(fTheTree);
   fCATS         -> InitBranch(fTheTree);
