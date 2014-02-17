@@ -152,8 +152,6 @@ void GUser::InitUser(){
   ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
   ((TCharissaPhysics*)    fMyDetector->GetDetector("Charissa"))    -> SetRawDataPointer(fCharissa    -> GetCharissaData());
 
-
-
   // Add correlation Spectra
   int NBins = 16384/8;
   int MinBin = 0;

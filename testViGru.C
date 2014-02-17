@@ -8,8 +8,8 @@
 
   // open data file to read
 //  GTape *file = new GTape("../e628_run/run_1064.dat.19Dec13_09h17m14s"); 
-//  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
- GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
+  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+// GTape *file = new GTape("../e628_run/run_1133.dat.20Dec13_21h11m12s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
 //  GTape *file = new GTape("../e628_run/run_1127.dat.20Dec13_15h25m33s");
@@ -34,7 +34,7 @@
  
   
   // Convert  Run //
-  a->DoRun(100000);
+  a->DoRun();
   
   // Close every thing, save spectra // 
   file->Close();
