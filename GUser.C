@@ -63,64 +63,10 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut  = _fDevOut;
-  fNPToolArgument = "-D ./detector.txt  -C calibration.txt -GH -O GRU";
-
-  // -GH for generating histos
-  // -CH for checking histos
-  // -C for calibration files
-  // -O for outputting the Physical Tree (followed by its name)
-  NPOptionManager *myOptionManager = NPOptionManager::getInstance(fNPToolArgument);
-
-  string detectorFile = myOptionManager->GetDetectorFile();
-  string OutputfileName      = myOptionManager->GetOutputFile();
-  RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
-
-  fMyDetector = new DetectorManager();
-  fMyDetector->ReadConfigurationFile(detectorFile);
+  string NPToolArgument = "-D ./detector.txt  -C calibration.txt -GH -O GRU";
   
-  MySpectraList = GetSpectra();
+  GUser(_fDevIn,NPToolArgument) ;
 
-  vector < map < vector <string>, TH1* > > mySpectra = fMyDetector->GetSpectra();
- 
-  for (unsigned int i = 0; i < mySpectra.size(); ++i) {
-    map<vector <string>, TH1*>::iterator it;
-    for (it = mySpectra[i].begin(); it != mySpectra[i].end(); ++it) {
-      GetSpectra()->AddSpectrum(it->second, it->first[0].c_str());
-    }
-  } 
-
-  // Instantiate the TDetectorManager
-  fDetectorManager = new G2R::TDetectorManager();
-  
-  // Add the detector from the NPTool detector manager:
-  vector<string> DetectorList = fMyDetector->GetDetectorList();
-  unsigned int sizeL = DetectorList.size(); 
-  
-  for(unsigned int i = 0 ; i < sizeL ; i++){
-    fDetectorManager->AddDetector(DetectorList[i]);
-  }
- 
-   // If you want to add more stuff not dealed with NPTool this is the place //
-  fDetectorManager->AddDetector("ModularLabel");
-  fDetectorManager->AddDetector("Trigger");
-  ////////////////////////////////////////////////////////////////////////////
-
-  // connect data objects to the physics
-  // need to be done detector by detector
-  TCATS* CATS = (TCATS*) fDetectorManager->GetDetector("CATS");
-  ((TCATSPhysics*) fMyDetector->GetDetector("CATS"))-> SetRawDataPointer(CATS->GetCATSData());
-  
-  TMust2* Must2 = (TMust2*) fDetectorManager->GetDetector("MUST2");
-  ((TMust2Physics*) fMyDetector->GetDetector("MUST2"))-> SetRawDataPointer(Must2->GetMust2Data());
-  
-  TTiaraHyball* TiaraHyball = (TTiaraHyball*) fDetectorManager->GetDetector("TiaraHyball");
-  ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball"))->SetRawDataPointer(TiaraHyball->GetTiaraHyballData());
-  
-  TTiaraBarrel* TiaraBarrel = (TTiaraBarrel*) fDetectorManager->GetDetector("TiaraBarrel");
-  ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel"))->SetRawDataPointer(TiaraBarrel->GetTiaraBarrelData());
-
-  TCharissa* Charissa = (TCharissa*) fDetectorManager->GetDetector("Charissa");
-  ((TCharissaPhysics*) fMyDetector->GetDetector("Charissa"))->SetRawDataPointer(Charissa->GetCharissaData());
 }
 ////////////////////////////////////////////////////////////////////////////////
 GUser::GUser (GDevice* _fDevIn, string NPToolArgument){ 
@@ -145,9 +91,9 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
 
   fMyDetector = new DetectorManager();
   fMyDetector->ReadConfigurationFile(detectorFile);
-  
-  MySpectraList = GetSpectra();
 
+  // Adding spectra  
+  MySpectraList = GetSpectra();
   vector < map < vector <string>, TH1* > > mySpectra = fMyDetector->GetSpectra();
  
   for (unsigned int i = 0; i < mySpectra.size(); ++i) {
@@ -169,6 +115,7 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   // If you want to add more stuff not dealed with NPTool this is the place //
   fDetectorManager->AddDetector("ModularLabel");
   fDetectorManager->AddDetector("Trigger");
+
   ////////////////////////////////////////////////////////////////////////////
   // connect data objects to the physics
   // need to be done detector by detector
