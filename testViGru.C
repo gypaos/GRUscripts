@@ -18,10 +18,10 @@
  file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU2");
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -O testGRU2");
   a->InitUser();
   a->EventInit();
-  a->SetTTreeMode(3, "run_test.root");
+  a->SetTTreeMode(3, "run_test2.root");
   // Set compression of the Output File
   // 0 extremely large file, no CPU use, high I/O latency so bad perf
   // 1 minimum compression, low on CPU (Recommanded by ROOT)
@@ -29,21 +29,21 @@
   a->SetCompressionLevel(1);
 
   // define GNetServerRoot to be able to connect vigru
-//  GNetServerRoot *serv = new GNetServerRoot(9090, a);
-//  serv->StartServer();
+  GNetServerRoot *serv = new GNetServerRoot(9090, a);
+  serv->StartServer();
  
   
   // Convert  Run //
-  a->DoRun(100000);
+  a->DoRun();
   
   // Close every thing, save spectra // 
   file->Close();
   a->EndUser();              
-  a->SpeSave("histo.root");
-  //serv->StopServer();
+  a->SpeSave("histo2.root");
+  serv->StopServer();
 
   // Delete all object // 
   delete a;
   //delete serv;  
 //  delete file;                        
-}
+

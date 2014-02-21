@@ -63,9 +63,9 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut  = _fDevOut;
-  string NPToolArgument = "-D ./detector.txt  -C calibration.txt -GH -O GRU";
+  string NPToolArgument = "-D ./detector.txt  -C calibration.txt -GH";
   
-  GUser(_fDevIn,NPToolArgument) ;
+  Init(_fDevIn,NPToolArgument) ;
 
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +75,12 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   // - Input Device
   // - Output Device
   fDevIn   = _fDevIn;
-  fDevOut  = NULL;
+  fDevOut = NULL;
+  Init(_fDevIn,NPToolArgument) ;
 
+}
+////////////////////////////////////////////////////////////////////////////////
+void GUser::Init(GDevice* _fDevIn, string NPToolArgument){ 
   fNPToolArgument = NPToolArgument;
 
   // -GH for generating histos
@@ -87,7 +91,8 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
 
   string detectorFile = myOptionManager->GetDetectorFile();
   string OutputfileName      = myOptionManager->GetOutputFile();
-  RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
+  if(OutputfileName!=myOptionManager->GetDefaultOutputFile())
+    RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
 
   fMyDetector = new DetectorManager();
   fMyDetector->ReadConfigurationFile(detectorFile);
@@ -137,8 +142,10 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
 
 ////////////////////////////////////////////////////////////////////////////////
 GUser::~GUser()  {
+  
   gROOT->cd();
-  RootOutput::getInstance()->Destroy();
+  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())
+    RootOutput::getInstance()->Destroy;
 
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -214,7 +221,8 @@ void GUser::User(){
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   fMyDetector->BuildPhysicalEvent();
   // Fill the Physics Tree
-  RootOutput::getInstance()->GetTree()->Fill(); 
+  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())   
+    RootOutput::getInstance()->GetTree()->Fill(); 
 
   /////////////////////////////////////////////////////////////////////////////
   // Fill the Correlation Histo
