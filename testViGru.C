@@ -8,11 +8,12 @@
 
   // open data file to read
 //  GTape *file = new GTape("../e628_run/run_1064.dat.19Dec13_09h17m14s"); 
-  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
+//  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
 // GTape *file = new GTape("../e628_run/run_1133.dat.20Dec13_21h11m12s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-//  GTape *file = new GTape("../e628_run/run_1127.dat.20Dec13_15h25m33s");
+  GTape *file = new GTape("../e628_run/run_1170.dat.22Dec13_02h46m12s");
+
 
  file->Open();
   file->Rewind();
@@ -20,7 +21,6 @@
   GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU2");
   a->InitUser();
   a->EventInit();
-  a->InitUserRun();
   a->SetTTreeMode(3, "run_test.root");
   // Set compression of the Output File
   // 0 extremely large file, no CPU use, high I/O latency so bad perf
@@ -34,7 +34,7 @@
  
   
   // Convert  Run //
-  a->DoRun();
+  a->DoRun(100000);
   
   // Close every thing, save spectra // 
   file->Close();

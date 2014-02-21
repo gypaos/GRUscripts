@@ -173,31 +173,19 @@ void GUser::InitUser(){
 void GUser::InitUserRun(){
   // Initialisation for user treatemeant for each  run  
   // For specific user treatement
-  cout << "Init run" << endl;
+  cout << "Init User Run" << endl;
   fModularLabel->LoadLabel("ModularLabel.txt");
   fModularLabel->Init(GetEvent()->GetDataParameters());
-  cout << "End Init ModularLabel" << endl ;
   fMust2->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Must2"<<endl;
   fCATS->Init(GetEvent()->GetDataParameters());
-  cout << "End Init CATS"<<endl;
   fExogam->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Exogam"<<endl;
   fTrigger->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Trigg"<<endl;
   fPlastic->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Plastic"<<endl;
   fLise->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Lise"<<endl;
   fTac->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tac"<<endl;
   fTiaraHyball->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tiara/Hyball"<<endl;
   fTiaraBarrel->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tiara/Barrel"<<endl;
   fCharissa->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Charissa"<<endl;
-  cout << "End Init run"<<endl;
 
   // keep track of read labels
   ofstream out_rej,out_acc;
@@ -205,21 +193,51 @@ void GUser::InitUserRun(){
   out_rej.open("label_rejected.dat");
   // Simulate an event loop with all label and value 0
   for (Int_t i = 0; i < GetEvent()->GetDataParameters()->GetNbParameters(); i++) {
-    bool included = true;
-
-    if (fModularLabel         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fMust2           ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fCATS            ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fExogam          ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fTrigger         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fPlastic         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fLise            ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {} 
-    else if (fTac             ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fTiaraHyball     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fTiaraBarrel     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else if (fCharissa        ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {}
-    else included = false;
-
+    bool included = false;
+    if (fModularLabel  ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      included = true;
+    }
+    if (fMust2        ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fCATS         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fExogam       ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fTrigger      ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fPlastic      ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fLise         ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    } 
+    if (fTac          ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fTiaraHyball  ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fTiaraBarrel  ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    if (fCharissa     ->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) {
+      if(included) cout << "Warning double assignement to label: " << GetEvent()->GetDataParameters()->GetLabel(i) << endl;
+      else included = true;
+    }
+    
     if (!included) 
       out_rej << i <<" "<<GetDataParameters()->GetParName(i)<<endl;
     else 
@@ -228,6 +246,7 @@ void GUser::InitUserRun(){
 
   out_rej.close();
   out_acc.close();
+cout << "End Init User Run" << endl ;
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::User(){ 
@@ -258,10 +277,10 @@ void GUser::User(){
     else if (fPlastic       ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
     else if (fLise          ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {} 
     else if (fTac           ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
+    else if (fCharissa      ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
     else if (fTiaraHyball   ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
     else if (fTiaraBarrel   ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fCharissa      ->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-  }
+}
 
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
