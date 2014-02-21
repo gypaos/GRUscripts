@@ -38,18 +38,7 @@
 #include "DetectorManager.h"
 
 // Ganil2Root headers
-#include "TDetector.h"
-#include "TModularLabel.h"
-#include "TMust2.h"
-#include "TCATS.h"
-#include "TExogam.h"
-#include "TTrigger.h"
-#include "TTac.h"
-#include "TPlastic.h"
-#include "TLise.h"
-#include "TTiaraHyball.h"
-#include "TTiaraBarrel.h"
-#include "TCharissa.h"
+#include "TDetectorManager.h"
 
 class GUser : public  GAcq
 {
@@ -61,17 +50,7 @@ class GUser : public  GAcq
 	GNetServerRoot*   MySpectraServer;
     
  private:
-	TModularLabel *fModularLabel;
-  TMust2        *fMust2;
-	TCATS	        *fCATS;
-  TExogam       *fExogam;
-	TTrigger      *fTrigger;
-	TTac          *fTac;
-	TPlastic      *fPlastic;
-	TLise         *fLise;
-  TTiaraHyball  *fTiaraHyball;
-  TTiaraBarrel  *fTiaraBarrel;
-  TCharissa     *fCharissa;
+  G2R::TDetectorManager* fDetectorManager;    
 
   string fNPToolArgument;
 
