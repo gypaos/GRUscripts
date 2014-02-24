@@ -87,12 +87,13 @@ void GUser::Init(GDevice* _fDevIn, string NPToolArgument){
   // -CH for checking histos
   // -C for calibration files
   // -O for outputting the Physical Tree (followed by its name)
-  NPOptionManager *myOptionManager = NPOptionManager::getInstance(fNPToolArgument);
+  NPOptionManager* myOptionManager = NPOptionManager::getInstance(fNPToolArgument);
 
   string detectorFile = myOptionManager->GetDetectorFile();
-  string OutputfileName      = myOptionManager->GetOutputFile();
-  if(OutputfileName!=myOptionManager->GetDefaultOutputFile())
+  string OutputfileName = myOptionManager->GetOutputFile();
+  if(OutputfileName!=myOptionManager->GetDefaultOutputFile()){
     RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
+  }
 
   fMyDetector = new DetectorManager();
   fMyDetector->ReadConfigurationFile(detectorFile);
@@ -143,10 +144,10 @@ void GUser::Init(GDevice* _fDevIn, string NPToolArgument){
 ////////////////////////////////////////////////////////////////////////////////
 GUser::~GUser()  {
   
-  gROOT->cd();
-  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())
-    RootOutput::getInstance()->Destroy;
-
+   if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile()){
+    gROOT->cd();
+    RootOutput::getInstance()->Destroy();
+  }
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUser(){
@@ -221,9 +222,9 @@ void GUser::User(){
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   fMyDetector->BuildPhysicalEvent();
   // Fill the Physics Tree
-  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())   
+  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())  { 
     RootOutput::getInstance()->GetTree()->Fill(); 
-
+}
   /////////////////////////////////////////////////////////////////////////////
   // Fill the Correlation Histo
   TModularLabel* ModularLabel = (TModularLabel*) fDetectorManager->GetDetector("ModularLabel");

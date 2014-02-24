@@ -9,16 +9,16 @@
   // open data file to read
 //  GTape *file = new GTape("../e628_run/run_1064.dat.19Dec13_09h17m14s"); 
 //  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
-// GTape *file = new GTape("../e628_run/run_1133.dat.20Dec13_21h11m12s");
+ GTape *file = new GTape("../e628_run/run_1133.dat.20Dec13_21h11m12s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-  GTape *file = new GTape("../e628_run/run_1170.dat.22Dec13_02h46m12s");
+//  GTape *file = new GTape("../e628_run/run_1115.dat.20Dec13_00h38m48s");
 
 
- file->Open();
+  file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -O testGRU2");
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU3");
   a->InitUser();
   a->EventInit();
   a->SetTTreeMode(3, "run_test2.root");
@@ -29,8 +29,8 @@
   a->SetCompressionLevel(1);
 
   // define GNetServerRoot to be able to connect vigru
-  GNetServerRoot *serv = new GNetServerRoot(9090, a);
-  serv->StartServer();
+//  GNetServerRoot *serv = new GNetServerRoot(9090, a);
+//  serv->StartServer();
  
   
   // Convert  Run //
@@ -40,10 +40,10 @@
   file->Close();
   a->EndUser();              
   a->SpeSave("histo2.root");
-  serv->StopServer();
+  //serv->StopServer();
 
   // Delete all object // 
   delete a;
   //delete serv;  
 //  delete file;                        
-
+}
