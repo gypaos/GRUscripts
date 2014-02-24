@@ -17,7 +17,7 @@
   file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU3");
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O run_phy/testGRU3");
   a->InitUser();
   a->EventInit();
   // Set compression of the Output File
@@ -27,8 +27,8 @@
   a->SetCompressionLevel(1);
 
   // define GNetServerRoot to be able to connect vigru
-//  GNetServerRoot *serv = new GNetServerRoot(9090, a);
-//  serv->StartServer();
+  GNetServerRoot *serv = new GNetServerRoot(9090, a);
+  serv->StartServer();
  
   
   // Convert  Run //
