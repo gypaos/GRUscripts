@@ -11,7 +11,8 @@
 // GTape *file = new GTape("../e628_run/run_1147.dat.21Dec13_11h39m01s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  
-  GTape *file = new GTape("../e628_run/run_1177.dat.23Dec13_01h26m32s");
+  //GTape *file = new GTape("../e628_run/run_1115.dat.20Dec13_00h38m48s");  
+  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1127.dat.20Dec13_15h25m33s.1");
 
  file->Open();
   file->Rewind();
@@ -20,7 +21,7 @@
   a->InitUser();
   a->EventInit();
   a->InitUserRun();
-  a->SetTTreeMode(3, "run_test.root");
+  a->SetTTreeMode(3, "test1127.root");
   // Set compression of the Output File
   // 0 extremely large file, no CPU use, high I/O latency so bad perf
   // 1 minimum compression, low on CPU (Recommanded by ROOT)
@@ -33,16 +34,16 @@
  
   
   // Convert  Run //
-  a->DoRun(1000);
+  a->DoRun();
   
   // Close every thing, save spectra // 
   file->Close();
   a->EndUser();              
-  a->SpeSave("histo.root");
+//  a->SpeSave("histo.root");
   //serv->StopServer();
 
   // Delete all object // 
   delete a;
   //delete serv;  
-//  delete file;                        
+  delete file;                        
 }

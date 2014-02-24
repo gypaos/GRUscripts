@@ -29,10 +29,13 @@ OutPutOpt     = -o
 ROOTCFLAGS   := $(shell root-config --cflags) -I$(ROOTSYS)/xmlparser/inc -I$(ROOTSYS)/io/xmlparser/inc
 ROOTLIBS     := $(shell root-config --libs) -lHtml -lSpectrum
 ROOTGLIBS    := $(shell root-config --glibs)
+OPTFLAGS      = -O3
 
-CXXFLAGS     += -O3 $(ROOTCFLAGS) $(GRUFLAGS)  
+CXXFLAGS     +=  $(ROOTCFLAGS) $(GRUFLAGS) $(OPTFLAGS) 
 LIBS          = $(ROOTLIBS)  $(SYSLIBS)
 GLIBS         = $(ROOTGLIBS) $(SYSLIBS)
+
+CINTOPTFLAGS  = -O0
 
 #------------------------------------------------------------------------------
 SHARELIB      = $(CLASSNAME)_C.so 
@@ -44,7 +47,7 @@ $(CLASSNAME)_C.so: $(CLASSNAME).o   $(CLASSNAME)Dict.o
 
 $(CLASSNAME)Dict.C:	$(CLASSNAME).h
 			@echo "Generating dictionary $@..."
-			rootcint -f $@ -c -p -O0 $(GRUFLAGS) $(INCLIST) $^ $(CLASSNAME)LinkDef.h
+			rootcint -f $@ -c -p $(CINTOPTFLAGS) $(GRUFLAGS) $(INCLIST) $^ $(CLASSNAME)LinkDef.h
 
 
 clean:

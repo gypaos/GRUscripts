@@ -6,7 +6,7 @@
 // input_dir must contain only input ganil runs to convert.
 // the runs must be sorted in aphanumeric order in their directory
 // and will contains the resutl of conversion
-void ConvertDirectoryBasic(Int_t run_nbr_max = 46, Int_t  run_nbr_min =  1)
+void ConvertDirectoryBasic(Int_t run_nbr_max = 46, Int_t  run_nbr_min =  44)
 {
    gROOT->Reset();
    TString GRUpath = gSystem->Getenv("GRUDIR");
@@ -14,16 +14,16 @@ void ConvertDirectoryBasic(Int_t run_nbr_max = 46, Int_t  run_nbr_min =  1)
    gROOT->ProcessLine(".L ./GUser_convert.C++O"); //load and compile GUser class 
 
    //  string acquis_dir = gSystem->Getenv("E530") ;
-   string acquis_dir = "/scratch/gypaos/data/testCOFEE" ;
+   string acquis_dir = "/data/e628X/e628/acquisition" ;
 
    // input_dir must contain input ganil runs.
    //the runs must be sorted in aphanumeric order in their directory
-   string  input_dir = acquis_dir + "/raw/";
+   string  input_dir = acquis_dir + "/run/";
 
 
    // output_dir must be empty
    // will contains the resutl of conversion
-   string output_dir = acquis_dir + "/root/";
+   string output_dir = acquis_dir + "/run_root_anna/";
 
    //_____________________________________________________________________________________
    string input_file;       //input file name
@@ -75,7 +75,7 @@ void ConvertDirectoryBasic(Int_t run_nbr_max = 46, Int_t  run_nbr_min =  1)
          if(atoi(number.c_str()) <= run_nbr_max &&
                atoi(number.c_str()) >= run_nbr_min){
 
-            string condition = "lsof -Fn +d /scratch/gypaos/data/testCOFEE/raw | grep ";
+            string condition = "lsof -Fn +d /data/e628X/e628/acquisition/run | grep ";
             condition += input_file;
             cout << "condition " << condition << endl;
 

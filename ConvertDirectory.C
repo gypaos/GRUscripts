@@ -6,18 +6,18 @@
 // input_dir must contain only input ganil runs to convert.
 // the runs must be sorted in aphanumeric order in their directory
 // and will contains the resutl of conversion
-void ConvertDirectory(Int_t run_nbr_max = 411, Int_t  run_nbr_min =  1)
+void ConvertDirectory(Int_t run_nbr_max = 32, Int_t  run_nbr_min =  34)
 {
   gROOT->Reset();
 //  gROOT->ProcessLine(".include /vol0/sandra/These/Analyse/e530/GRU/include");
   gROOT->ProcessLine(".L ./GUser_convert.C++O"); //load and compile GUser class 
   
   //  string acquis_dir = gSystem->Getenv("E530") ;
-  string acquis_dir = "/media/e530/" ;
+  string acquis_dir = "/data/e628X/e628/acquisition/" ;
   
   // input_dir must contain input ganil runs.
   //the runs must be sorted in aphanumeric order in their directory
-  string  input_dir = acquis_dir + "data/";
+  string  input_dir = acquis_dir + "run";
   
   
   // output_dir must be empty
