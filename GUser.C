@@ -33,6 +33,19 @@
 #include "TCATSPhysics.h"
 #include "TCharissaPhysics.h"
 
+// GANIL2ROOT
+#include "TModularLabel.h" 
+#include "TMust2.h"   
+#include "TCATS.h"
+#include "TExogam.h" 
+#include "TTrigger.h"  
+#include "TTac.h"
+#include "TPlastic.h"  
+#include "TLise.h"   
+#include "TTiaraHyball.h"   
+#include "TTiaraBarrel.h"  
+#include "TCharissa.h" 
+
 // C++ headers
 #include <iostream>
 #include <fstream>
@@ -42,7 +55,7 @@ using namespace std;
 
 
 ClassImp (GUser); 
-
+////////////////////////////////////////////////////////////////////////////////
 GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){ 
   // Constructor/initialisator of Acquisition object 
   // entry:
@@ -50,66 +63,42 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut  = _fDevOut;
-
-  // instantiate detector objects
-  fMust2         = new TMust2();
-  fCATS          = new TCATS();
-  fExogam        = new TExogam();
-  fTrigger	      = new TTrigger();
-  fTac           = new TTac();
-  fPlastic       = new TPlastic();
-  fLise          = new TLise();
-  fTiaraHyball   = new TTiaraHyball();
-  fTiaraBarrel   = new TTiaraBarrel();
-  fCharissa      = new TCharissa();
-
-  MySpectraList = GetSpectra();
-  cout << "Spectra done" << endl;  
-}
-
-
-
-GUser::~GUser()  {
-  // Destructor of class GUser
-  delete fMust2;
-  delete fCATS;
-  delete fExogam;
-  delete fTrigger;
-  delete fTac;
-  delete fPlastic;
-  delete fLise;
-  delete fTiaraHyball;
-  delete fTiaraBarrel;
-  delete fCharissa;
-
-  gROOT->cd();
-  RootOutput::getInstance()->Destroy();
+  string NPToolArgument = "-D ./detector.txt  -C calibration.txt -GH";
+  
+  Init(_fDevIn,NPToolArgument) ;
 
 }
+////////////////////////////////////////////////////////////////////////////////
+GUser::GUser (GDevice* _fDevIn, string NPToolArgument){ 
+  // Constructor/initialisator of Acquisition object 
+  // entry:
+  // - Input Device
+  // - Output Device
+  fDevIn   = _fDevIn;
+  fDevOut = NULL;
+  Init(_fDevIn,NPToolArgument) ;
 
+}
+////////////////////////////////////////////////////////////////////////////////
+void GUser::Init(GDevice* _fDevIn, string NPToolArgument){ 
+  fNPToolArgument = NPToolArgument;
 
-
-void GUser::InitUser(){
-  // Initialisation for global  user treatement
-
-  cout<<  "- ---------< Init User  >------------------!\n";
-  cout << "+++++ Init NPOption Manager" << endl;
   // -GH for generating histos
   // -CH for checking histos
   // -C for calibration files
   // -O for outputting the Physical Tree (followed by its name)
-  string argument = "-D ./detector.txt  -C calibration.txt -GH -O testGRU";
-  NPOptionManager *myOptionManager = NPOptionManager::getInstance(argument);
+  NPOptionManager *myOptionManager = NPOptionManager::getInstance(fNPToolArgument);
 
   string detectorFile = myOptionManager->GetDetectorFile();
   string OutputfileName      = myOptionManager->GetOutputFile();
-  RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
+  if(OutputfileName!=myOptionManager->GetDefaultOutputFile())
+    RootOutput::getInstance("Analysis/"+OutputfileName, "AnalysedTree"); 
 
-  cout << "+++++ Init Detector Manager" << endl;
   fMyDetector = new DetectorManager();
   fMyDetector->ReadConfigurationFile(detectorFile);
 
-  cout << "+++++ Register detector spectra to viGru" << endl;
+  // Adding spectra  
+  MySpectraList = GetSpectra();
   vector < map < vector <string>, TH1* > > mySpectra = fMyDetector->GetSpectra();
  
   for (unsigned int i = 0; i < mySpectra.size(); ++i) {
@@ -119,62 +108,90 @@ void GUser::InitUser(){
     }
   } 
 
+  // Instantiate the TDetectorManager
+  fDetectorManager = new G2R::TDetectorManager();
+  // Add the detector from the NPTool detector manager:
+  vector<string> DetectorList = fMyDetector->GetDetectorList();
+  unsigned int sizeL = DetectorList.size(); 
+  for(unsigned int i = 0 ; i < sizeL ; i++){
+    fDetectorManager->AddDetector(DetectorList[i]);
+  }
+
+  // If you want to add more stuff not dealed with NPTool this is the place //
+  fDetectorManager->AddDetector("ModularLabel");
+  fDetectorManager->AddDetector("Trigger");
+
+  ////////////////////////////////////////////////////////////////////////////
   // connect data objects to the physics
   // need to be done detector by detector
-  ((TCATSPhysics*)        fMyDetector->GetDetector("CATS"))        -> SetRawDataPointer(fCATS        -> GetCATSData());
-  ((TMust2Physics*)       fMyDetector->GetDetector("MUST2"))       -> SetRawDataPointer(fMust2       -> GetMust2Data());
-  ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball")) -> SetRawDataPointer(fTiaraHyball -> GetTiaraHyballData());
-  ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel")) -> SetRawDataPointer(fTiaraBarrel -> GetTiaraBarrelData());
-  ((TCharissaPhysics*)    fMyDetector->GetDetector("Charissa"))    -> SetRawDataPointer(fCharissa    -> GetCharissaData());
+  TCATS* CATS = (TCATS*) fDetectorManager->GetDetector("CATS");
+  ((TCATSPhysics*) fMyDetector->GetDetector("CATS"))-> SetRawDataPointer(CATS->GetCATSData());
+  
+  TMust2* Must2 = (TMust2*) fDetectorManager->GetDetector("MUST2");
+  ((TMust2Physics*) fMyDetector->GetDetector("MUST2"))-> SetRawDataPointer(Must2->GetMust2Data());
+  
+  TTiaraHyball* TiaraHyball = (TTiaraHyball*) fDetectorManager->GetDetector("TiaraHyball");
+  ((TTiaraHyballPhysics*) fMyDetector->GetDetector("TiaraHyball"))->SetRawDataPointer(TiaraHyball->GetTiaraHyballData());
+  
+  TTiaraBarrel* TiaraBarrel = (TTiaraBarrel*) fDetectorManager->GetDetector("TiaraBarrel");
+  ((TTiaraBarrelPhysics*) fMyDetector->GetDetector("TiaraBarrel"))->SetRawDataPointer(TiaraBarrel->GetTiaraBarrelData());
+
+  TCharissa* Charissa = (TCharissa*) fDetectorManager->GetDetector("Charissa");
+  ((TCharissaPhysics*) fMyDetector->GetDetector("Charissa"))->SetRawDataPointer(Charissa->GetCharissaData());
 }
 
+////////////////////////////////////////////////////////////////////////////////
+GUser::~GUser()  {
+  
+  gROOT->cd();
+  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())
+    RootOutput::getInstance()->Destroy;
 
+}
+////////////////////////////////////////////////////////////////////////////////
+void GUser::InitUser(){
+  // Initialisation for global  user treatement
+cout<<  "- ---------< Init User  >------------------!\n";
+
+    // Add correlation Spectra
+  int NBins = 16384/8;
+  int MinBin = 0;
+  int MaxBin = 16384;
+  TH2F* MUST_CATS = new TH2F("MUST_CATS","MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_CATS,"Correlation");
+
+  TH2F* MUST_TIARA = new TH2F("MUST_TIARA","MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_TIARA,"Correlation");
+
+  TH2F* MUST_CHARISSA = new TH2F("MUST_CHARISSA","MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_CHARISSA,"Correlation");
+
+  TH2F* MUST_EXO = new TH2F("MUST_EXO","MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(MUST_EXO,"Correlation");
+
+}
+////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUserRun(){
   // Initialisation for user treatemeant for each  run  
   // For specific user treatement
-  cout << "Init run" << endl;
-  fMust2->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Must2"<<endl;
-  fCATS->Init(GetEvent()->GetDataParameters());
-  cout << "End Init CATS"<<endl;
-  fExogam->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Exogam"<<endl;
-  fTrigger->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Trigg"<<endl;
-  fPlastic->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Plastic"<<endl;
-  fLise->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Lise"<<endl;
-  fTac->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tac"<<endl;
-  fTiaraHyball->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tiara/Hyball"<<endl;
-  fTiaraBarrel->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Tiara/Barrel"<<endl;
-  fCharissa->Init(GetEvent()->GetDataParameters());
-  cout << "End Init Charissa"<<endl;
-  cout << "End Init run"<<endl;
+  cout << "Init User Run" << endl;
+  TModularLabel* ML = (TModularLabel*) fDetectorManager->GetDetector("ModularLabel");
+  ML->LoadLabel("ModularLabel.txt");
+   
+  fDetectorManager->Init(GetEvent()->GetDataParameters());
 
   // keep track of read labels
   ofstream out_rej,out_acc;
   out_acc.open("label_accepted.dat");
   out_rej.open("label_rejected.dat");
-
-  for (Int_t i = 0; i < GetEventArraySize(); i++) {
-    bool included = true;
-
-    if (fMust2->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)){}
-    else if (fCATS->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if (fExogam->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTac->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTrigger->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fLise->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fPlastic->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTiaraHyball->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fTiaraBarrel->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else if(fCharissa->GetLabelMap(GetDataParameters()->GetLabel(i)) == GetDataParameters()->GetParName(i)) {}
-    else included = false;
-   
+  // Simulate an event loop with all label and value 0
+  for (Int_t i = 0; i < GetEvent()->GetDataParameters()->GetNbParameters(); i++) {
+    bool included = false;
+    
+    if (fDetectorManager->Is(GetEvent()->GetDataParameters()->GetLabel(i),0)) 
+      included = true;
+    
+    
     if (!included) 
       out_rej << i <<" "<<GetDataParameters()->GetParName(i)<<endl;
     else 
@@ -183,95 +200,55 @@ void GUser::InitUserRun(){
 
   out_rej.close();
   out_acc.close();
+cout << "End Init User Run" << endl ;
 }
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::User(){ 
   // clear objects
-  fMust2        -> Clear();
-  fCATS         -> Clear();
-  fExogam       -> Clear();
-  fTrigger      -> Clear();
-  fTac          -> Clear();
-  fPlastic      -> Clear();
-  fLise         -> Clear();
-  fTiaraHyball  -> Clear();
-  fTiaraBarrel  -> Clear();
-  fCharissa     -> Clear();
+  fDetectorManager -> Clear();
 
   //////////////////////////////////////////////////
   //     Unpack events & fill raw data objects    //
   //////////////////////////////////////////////////
 
-  map<int,int> label_rec;
   int mySize =  GetEventArrayLabelValueSize()/2;
-  for (Int_t i = 0; i < mySize; i++) {
-    label_rec[GetEventArrayLabelValue_Label(i)]+=1;
-    if (fMust2->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fCATS->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fExogam->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTrigger->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fPlastic->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fLise->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))){} 
-    else if (fTac->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTiaraHyball->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fTiaraBarrel->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-    else if (fCharissa->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i))) {}
-  }
-  /*
-     bool trig= false;
-     map<int,int>::iterator it ;
-     for(it=label_rec.begin();it!=label_rec.end();++it)
-     if(it->second>1&&it->first!=0) trig=true;
+  for (Int_t i = 0; i < mySize; i++) 
+    fDetectorManager->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i));
 
-     if(trig){
-     int ll = 0;
-     cout << endl << "Wrong label" << endl ; 
-     for(it=label_rec.begin();it!=label_rec.end();++it){
-     if(it->second>1){ll++; cout << it->first  << " " << it->second <<"|" ;}
-     if(ll%10==0)cout << endl ;
-     }
-     cout <<endl <<  "///////////////////////////////////" << endl; 
-     for (Int_t i = 0; i < mySize; i++) {
-     cout << GetEventArrayLabelValue_Label(i) << " "  ;
-     if(i%20==0&&i!=0) cout << endl ;
-     }
-     }
-     */
+
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   //        Call BuildPhysicalEvent (physical treatment) for each declared detector in the detector.txt file      //
   //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  fMyDetector->BuildSimplePhysicalEvent();
-
+  fMyDetector->BuildPhysicalEvent();
   // Fill the Physics Tree
-  RootOutput::getInstance()->GetTree()->Fill(); 
+  if( NPOptionManager::getInstance()->GetOutputFile()!=NPOptionManager::getInstance()->GetDefaultOutputFile())   
+    RootOutput::getInstance()->GetTree()->Fill(); 
 
+  /////////////////////////////////////////////////////////////////////////////
+  // Fill the Correlation Histo
+  TModularLabel* ModularLabel = (TModularLabel*) fDetectorManager->GetDetector("ModularLabel");
+  short must = ModularLabel->GetValue("EXO_MUST");
+  short exogam = ModularLabel->GetValue("EXO_EXO");
+  short cats = ModularLabel->GetValue("EXO_CATS");
+  short tiara = ModularLabel->GetValue("EXO_TIARA");
+  short charissa = ModularLabel->GetValue("EXO_CHARISSA");
+
+  GetSpectra()->GetHisto("MUST_CATS")->Fill(must,cats);
+  GetSpectra()->GetHisto("MUST_TIARA")->Fill(must,tiara);
+  GetSpectra()->GetHisto("MUST_CHARISSA")->Fill(must,charissa);
+  GetSpectra()->GetHisto("MUST_EXO")->Fill(must,exogam);
 
 }
-
-
-
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUserRun(){
-  //  end of run ,  executed a end of each run
   cout <<"--------------< End User Run >------------------\n";
 
 }
-
-//______________________________________________________________
+////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUser(){
-  // globlal final end executed a end of runs
-  // must be explicitly called! 
-
-
   cout <<"--------------< End User 1> ------------------\n";
-
-  //cout << "End save spectra " << endl;    
-
 }
-//______________________________________________________________________________
-
+////////////////////////////////////////////////////////////////////////////////
 void GUser::InitTTreeUser(){
   cout << "GUser::InitTTreeUser()" << endl;
   cout << "GUser::InitTTreeUser() -> fTheTree " << fTheTree << endl;
@@ -279,16 +256,7 @@ void GUser::InitTTreeUser(){
   fTheTree->Branch("RunNumber",&fRunNumber,"RunNumber/I");
   fTheTree->Branch("EvtNumber",&fEventCount,"EvtNumber/I");
 
-  fMust2        -> InitBranch(fTheTree);
-  fCATS         -> InitBranch(fTheTree);
-  fExogam       -> InitBranch(fTheTree);
-  fTrigger      -> InitBranch(fTheTree);
-  fTac          -> InitBranch(fTheTree);
-  fPlastic      -> InitBranch(fTheTree);
-  fLise         -> InitBranch(fTheTree);
-  fTiaraHyball  -> InitBranch(fTheTree);
-  fTiaraBarrel  -> InitBranch(fTheTree);
-  fCharissa     -> InitBranch(fTheTree);
+  fDetectorManager-> InitBranch(fTheTree);
 
   cout << "End GUser::InitTTreeUser()" << endl;
 }

@@ -38,18 +38,7 @@
 #include "DetectorManager.h"
 
 // Ganil2Root headers
-#include "TDetector.h"
-#include "TMust2.h"
-#include "TCATS.h"
-#include "TExogam.h"
-#include "TTrigger.h"
-#include "TTac.h"
-#include "TPlastic.h"
-#include "TLise.h"
-#include "TTiaraHyball.h"
-#include "TTiaraBarrel.h"
-#include "TCharissa.h"
-
+#include "TDetectorManager.h"
 
 class GUser : public  GAcq
 {
@@ -61,16 +50,9 @@ class GUser : public  GAcq
 	GNetServerRoot*   MySpectraServer;
     
  private:
-	TMust2        *fMust2;
-	TCATS	        *fCATS;
-   TExogam       *fExogam;
-	TTrigger      *fTrigger;
-	TTac          *fTac;
-	TPlastic      *fPlastic;
-	TLise         *fLise;
-   TTiaraHyball  *fTiaraHyball;
-   TTiaraBarrel  *fTiaraBarrel;
-   TCharissa     *fCharissa;
+  G2R::TDetectorManager* fDetectorManager;    
+
+  string fNPToolArgument;
 
  TH2F* EXO_CATS;
  TH2F* EXO_MUST;    
@@ -86,8 +68,10 @@ class GUser : public  GAcq
 
  public:
    GUser(GDevice* _fDevIn= NULL, GDevice* _fDevOut= NULL);  // default constructor of GUser object 
-   ~GUser();                                                // destructor of GUser object 
-
+   GUser(GDevice* _fDevIn, string NPToolOption);  // NPTool specific constructor 
+   ~GUser();// destructor of GUser object 
+   
+   void Init(GDevice* _fDevIn, string NPToolOption);
    virtual void InitUser();
    virtual void InitUserRun();
    virtual void User();
