@@ -54,6 +54,15 @@ class GUser : public  GAcq
 
   string fNPToolArgument;
 
+ TH2F* EXO_CATS;
+ TH2F* EXO_MUST;    
+ TH2F* EXO_TIARA;   
+ TH2F* EXO_EXO   ;  
+ TH2F* EXO_CHARISSA;
+
+
+
+
  private:
    DetectorManager   *fMyDetector;
 

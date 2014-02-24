@@ -1,3 +1,19 @@
+<<<<<<< HEAD
+CalibrationFilePath
+   calib/CATS1_X.txt
+   calib/CATS1_Y.txt
+   calib/CATS2_X.txt
+   calib/CATS2_Y.txt
+   calib/Cal_Str_X_E_MM1.cal
+   calib/Cal_Str_X_E_MM2.cal
+   calib/Cal_Str_X_E_MM3.cal
+   calib/Cal_Str_X_E_MM4.cal
+   calib/Cal_Str_Y_E_MM1.cal
+   calib/Cal_Str_Y_E_MM2.cal
+   calib/Cal_Str_Y_E_MM3.cal
+   calib/Cal_Str_Y_E_MM4.cal
+
+=======
 CalibrationFilePath
    calib/CATS1_X.txt
    calib/CATS1_Y.txt
@@ -17,3 +33,4 @@ CalibrationFilePath
    calib/CharissaMatchstick.txt
    calib/HyballCalib.txt
    calib/HyballMatchstick.txt
+>>>>>>> 9de24afb867ba4b195001e14204fc44b347ea434

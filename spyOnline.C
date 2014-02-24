@@ -8,7 +8,7 @@
 
    // connect to data flow
 //   GNetClientNarval *net = new GNetClientNarval("193.48.111.163"); //
-   GNetClientNarval *net = new GNetClientNarval("localhost"); //
+   GNetClientNarval *net = new GNetClientNarval("ganp166"); //
    net->SetPort(10202);  
    net->SetBufferSize(65536);
 
@@ -19,7 +19,7 @@
    GNetServerRoot *serv = new GNetServerRoot(9090, a);
 
    // get exp. name
-   TString ExpName = gSystem->Getenv("USERNAME");
+   TString ExpName = gSystem->Getenv("USER");
    a->EventInit(ExpName.Data());                   // event initialisation 
    a->SetSpectraMode(1);                           // Declare all raw parameters as histograms 
    a->SetUserMode(1);	                           // execute GUser::InitUser()
