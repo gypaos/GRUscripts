@@ -75,7 +75,7 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut = NULL;
-fNPToolArgument = NPToolArgument; 
+  fNPToolArgument = NPToolArgument; 
 
 }
 ////////////////////////////////////////////////////////////////////////////////

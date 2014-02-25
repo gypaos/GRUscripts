@@ -14,19 +14,19 @@
 
    // instantiate GUSer object
    GUser *a = new GUser(net,"-D ./detector.txt  -C calibration.txt -GH");       
+   a->SetSpectraMode(1);                           // Declare all raw parameters as histograms 
+   // get exp. name
+   TString ExpName = gSystem->Getenv("USER");
+   a->EventInit(ExpName.Data());                   // event initialisation 
+   a->SetUserMode(1);	                           // execute GUser::InitUser()
+   
    // create user treatement environement 
    // instantiate spectrum server for vigru
    GNetServerRoot *serv = new GNetServerRoot(9090, a);
 
-   // get exp. name
-   TString ExpName = gSystem->Getenv("USER");
-   a->EventInit(ExpName.Data());                   // event initialisation 
-   a->SetSpectraMode(1);                           // Declare all raw parameters as histograms 
-   a->SetUserMode(1);	                           // execute GUser::InitUser()
-
    // start hist server
    serv->StartServer();
-   a->DoRun();                                     // a->DoRun(2000); do treaments on 2000 first events ( 0 = all);
+   a->DoRun();
 
    net->Close();                       
 

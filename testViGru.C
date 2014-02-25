@@ -18,9 +18,9 @@
   file->Rewind();
   // define GUser
   GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU3");
-  a->InitUser();
-  a->EventInit();
   a->SetSpectraMode(1);
+  a->EventInit();
+  a->SetUserMode(1);
   // Set compression of the Output File
   // 0 extremely large file, no CPU use, high I/O latency so bad perf
   // 1 minimum compression, low on CPU (Recommanded by ROOT)
