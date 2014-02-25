@@ -13,7 +13,7 @@
    net->SetBufferSize(65536);
 
    // instantiate GUSer object
-   GUser *a = new GUser(net,"-D ./detector.txt  -C calibration.txt");       
+   GUser *a = new GUser(net,"-D ./detector.txt  -C calibration.txt -GH");       
    // create user treatement environement 
    // instantiate spectrum server for vigru
    GNetServerRoot *serv = new GNetServerRoot(9090, a);
