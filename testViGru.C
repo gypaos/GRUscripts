@@ -11,16 +11,17 @@
 //  GTape *file = new GTape("../e628_run/run_1067.dat.19Dec13_10h08m35s"); 
 // GTape *file = new GTape("../e628_run/run_1133.dat.20Dec13_21h11m12s");
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
- 
-  GTape *file = new GTape("../run/run_1209.dat.24Feb14_19h24m07s");
+// GTape *file = new GTape("../run/run_1209.dat.24Feb14_19h24m07s");
+
+  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1209.dat.24Feb14_19h24m07s");
 
   file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O testGRU3");
-  a->SetSpectraMode(1);
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O run_phy/testGRU3");
   a->EventInit();
-  a->SetUserMode(1);
+  a->SetSpectraMode(1);
+  a->InitUser();
   // Set compression of the Output File
   // 0 extremely large file, no CPU use, high I/O latency so bad perf
   // 1 minimum compression, low on CPU (Recommanded by ROOT)
@@ -28,12 +29,12 @@
   a->SetCompressionLevel(1);
 
   // define GNetServerRoot to be able to connect vigru
-//  GNetServerRoot *serv = new GNetServerRoot(9090, a);
-//  serv->StartServer();
+ GNetServerRoot *serv = new GNetServerRoot(2001, a);
+  serv->StartServer();
  
 
   // Convert  Run //
-  a->DoRun(10000);
+  a->DoRun();
   
   // Close every thing, save spectra // 
   file->Close();
