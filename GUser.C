@@ -21,7 +21,7 @@
 
 // ROOT headers
 #include "TROOT.h"
-#include "TH1F.h"
+#include "TH1.h"
 #include "TString.h"
 
 // NPTOOL headers
@@ -63,9 +63,8 @@ GUser::GUser (GDevice* _fDevIn, GDevice* _fDevOut){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut  = _fDevOut;
-  string NPToolArgument = "-D ./detector.txt  -C calibration.txt -GH";
+  fNPToolArgument = "-D ./detector.txt  -C calibration.txt -GH";
   
-  Init(_fDevIn,NPToolArgument) ;
 
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -76,13 +75,11 @@ GUser::GUser (GDevice* _fDevIn, string NPToolArgument){
   // - Output Device
   fDevIn   = _fDevIn;
   fDevOut = NULL;
-  Init(_fDevIn,NPToolArgument) ;
+fNPToolArgument = NPToolArgument; 
 
 }
 ////////////////////////////////////////////////////////////////////////////////
-void GUser::Init(GDevice* _fDevIn, string NPToolArgument){ 
-  fNPToolArgument = NPToolArgument;
-
+void GUser::Init(string NPToolArgument){ 
   // -GH for generating histos
   // -CH for checking histos
   // -C for calibration files
@@ -108,6 +105,7 @@ void GUser::Init(GDevice* _fDevIn, string NPToolArgument){
       GetSpectra()->AddSpectrum(it->second, it->first[0].c_str());
     }
   } 
+
 
   // Instantiate the TDetectorManager
   fDetectorManager = new G2R::TDetectorManager();
@@ -153,23 +151,24 @@ GUser::~GUser()  {
 void GUser::InitUser(){
   // Initialisation for global  user treatement
 cout<<  "- ---------< Init User  >------------------!\n";
+  // Init the NPTool Part
+  Init(fNPToolArgument);
 
-    // Add correlation Spectra
+  // Add correlation Spectra
   int NBins = 16384/8;
   int MinBin = 0;
   int MaxBin = 16384;
-  TH2F* MUST_CATS = new TH2F("MUST_CATS","MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_CATS = new TH2I("Correlation_MUST_CATS","Correlation_MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_CATS,"Correlation");
 
-  TH2F* MUST_TIARA = new TH2F("MUST_TIARA","MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_TIARA = new TH2I("Correlation_MUST_TIARA","Correlation_MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_TIARA,"Correlation");
 
-  TH2F* MUST_CHARISSA = new TH2F("MUST_CHARISSA","MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_CHARISSA = new TH2I("Correlation_MUST_CHARISSA","Correlation_MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_CHARISSA,"Correlation");
 
-  TH2F* MUST_EXO = new TH2F("MUST_EXO","MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_EXO = new TH2I("Correlation_MUST_EXO","Correlation_MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_EXO,"Correlation");
-
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUserRun(){
@@ -211,7 +210,6 @@ void GUser::User(){
   //////////////////////////////////////////////////
   //     Unpack events & fill raw data objects    //
   //////////////////////////////////////////////////
-
   int mySize =  GetEventArrayLabelValueSize()/2;
   for (Int_t i = 0; i < mySize; i++) 
     fDetectorManager->Is(GetEventArrayLabelValue_Label(i),GetEventArrayLabelValue_Value(i));
@@ -234,11 +232,10 @@ void GUser::User(){
   short tiara = ModularLabel->GetValue("EXO_TIARA");
   short charissa = ModularLabel->GetValue("EXO_CHARISSA");
 
-  GetSpectra()->GetHisto("MUST_CATS")->Fill(must,cats);
-  GetSpectra()->GetHisto("MUST_TIARA")->Fill(must,tiara);
-  GetSpectra()->GetHisto("MUST_CHARISSA")->Fill(must,charissa);
-  GetSpectra()->GetHisto("MUST_EXO")->Fill(must,exogam);
-
+  GetSpectra()->GetHisto("Correlation_MUST_CATS")->Fill(must,cats);
+  GetSpectra()->GetHisto("Correlation_MUST_TIARA")->Fill(must,tiara);
+  GetSpectra()->GetHisto("Correlation_MUST_CHARISSA")->Fill(must,charissa);
+  GetSpectra()->GetHisto("Correlation_MUST_EXO")->Fill(must,exogam);
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUserRun(){

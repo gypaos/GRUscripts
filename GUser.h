@@ -71,7 +71,7 @@ class GUser : public  GAcq
    GUser(GDevice* _fDevIn, string NPToolOption);  // NPTool specific constructor 
    ~GUser();// destructor of GUser object 
    
-   void Init(GDevice* _fDevIn, string NPToolOption);
+   void Init( string NPToolOption);
    virtual void InitUser();
    virtual void InitUserRun();
    virtual void User();
