@@ -158,17 +158,28 @@ cout<<  "- ---------< Init User  >------------------!\n";
   int NBins = 16384/16;
   int MinBin = 0;
   int MaxBin = 0;
-  TH2I* MUST_CATS = new TH2I("Correlation_MUST_CATS","Correlation_MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_CATS = new TH2I("MUST_CATS","MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_CATS,"Correlation");
 
-  TH2I* MUST_TIARA = new TH2I("Correlation_MUST_TIARA","Correlation_MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_TIARA = new TH2I("MUST_TIARA","MUST_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_TIARA,"Correlation");
 
-  TH2I* MUST_CHARISSA = new TH2I("Correlation_MUST_CHARISSA","Correlation_MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_CHARISSA = new TH2I("MUST_CHARISSA","MUST_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_CHARISSA,"Correlation");
 
-  TH2I* MUST_EXO = new TH2I("Correlation_MUST_EXO","Correlation_MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  TH2I* MUST_EXO = new TH2I("MUST_EXO","MUST_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_EXO,"Correlation");
+
+  TH2I* CATS_TIARA = new TH2I("CATS_TIARA","CATS_TIARA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(CATS_TIARA,"Correlation");
+
+  TH2I* CATS_CHARISSA = new TH2I("CATS_CHARISSA","CATS_CHARISSA",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(CATS_CHARISSA,"Correlation");
+
+  TH2I* CATS_EXO = new TH2I("CATS_EXO","CATS_EXO",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
+  GetSpectra()->AddSpectrum(CATS_EXO,"Correlation");
+
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::InitUserRun(){
@@ -232,10 +243,16 @@ void GUser::User(){
   short tiara = ModularLabel->GetValue("EXO_TIARA");
   short charissa = ModularLabel->GetValue("EXO_CHARISSA");
 
-  GetSpectra()->GetHisto("Correlation_MUST_CATS")->Fill(must,cats);
-  GetSpectra()->GetHisto("Correlation_MUST_TIARA")->Fill(must,tiara);
-  GetSpectra()->GetHisto("Correlation_MUST_CHARISSA")->Fill(must,charissa);
-  GetSpectra()->GetHisto("Correlation_MUST_EXO")->Fill(must,exogam);
+  GetSpectra()->GetHisto("MUST_CATS")->Fill(must,cats);
+  GetSpectra()->GetHisto("MUST_TIARA")->Fill(must,tiara);
+  GetSpectra()->GetHisto("MUST_CHARISSA")->Fill(must,charissa);
+  GetSpectra()->GetHisto("MUST_EXO")->Fill(must,exogam);
+  
+  GetSpectra()->GetHisto("CATS_TIARA")->Fill(cats,tiara);
+  GetSpectra()->GetHisto("CATS_CHARISSA")->Fill(cats,charissa);
+  GetSpectra()->GetHisto("CATS_EXO")->Fill(cats,exogam);
+
+
 }
 ////////////////////////////////////////////////////////////////////////////////
 void GUser::EndUserRun(){
