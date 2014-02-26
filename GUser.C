@@ -155,9 +155,9 @@ cout<<  "- ---------< Init User  >------------------!\n";
   Init(fNPToolArgument);
 
   // Add correlation Spectra
-  int NBins = 16384/8;
+  int NBins = 16384/16;
   int MinBin = 0;
-  int MaxBin = 16384;
+  int MaxBin = 0;
   TH2I* MUST_CATS = new TH2I("Correlation_MUST_CATS","Correlation_MUST_CATS",NBins,MinBin,MaxBin,NBins,MinBin,MaxBin);
   GetSpectra()->AddSpectrum(MUST_CATS,"Correlation");
 
