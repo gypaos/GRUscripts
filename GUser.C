@@ -138,8 +138,8 @@ void GUser::Init(string NPToolArgument){
   TCharissa* Charissa = (TCharissa*) fDetectorManager->GetDetector("Charissa");
   ((TCharissaPhysics*) fMyDetector->GetDetector("Charissa"))->SetRawDataPointer(Charissa->GetCharissaData());
 
-//  TExogam* Exogam = (TExogam*) fDetectorManager->GetDetector("EXOGAM");
-//  ((TExogamPhysics*) fMyDetector->GetDetector("EXOGAM"))->SetRawDataPointer(Exogam->GetExogamData());
+  TExogam* Exogam = (TExogam*) fDetectorManager->GetDetector("EXOGAM");
+  ((TExogamPhysics*) fMyDetector->GetDetector("EXOGAM"))->SetRawDataPointer(Exogam->GetExogamData());
 
 }
 
