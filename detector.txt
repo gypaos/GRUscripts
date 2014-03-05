@@ -99,6 +99,21 @@ X1_Y1=      10   -10 350
 X1_Y16= -10  -10 350
 X16_Y1= -10   10  350
 X16_Y16=  10 10  350
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+EXOGAMArray
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%1
+EXOGAMClover
+        ANGLES_FILE=    angles_exogam_clover0_01_03_2014.txt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%2
+EXOGAMClover
+        ANGLES_FILE=    angles_exogam_clover1_01_03_2014.txt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%3
+EXOGAMClover
+        ANGLES_FILE=    angles_exogam_clover2_01_03_2014.txt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%4
+EXOGAMClover
+        ANGLES_FILE=    angles_exogam_clover3_01_03_2014.txt
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%0
 
  
 

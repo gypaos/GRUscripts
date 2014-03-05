@@ -17,3 +17,5 @@ CalibrationFilePath
    calib/Charissa.txt
    calib/HyballCalib.txt
    calib/HyballMatchstick.txt
+   calib/calibration_Exogam_Seg_27_02_2014.cal
+   calib/calibration_Exogam_ECC_04_03_2014.cal

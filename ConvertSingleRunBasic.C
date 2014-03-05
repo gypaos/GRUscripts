@@ -8,7 +8,7 @@
   gROOT->ProcessLine(".L ./GUser_C.so"); // load and compile GUser class
                                          //  gSystem->Load("./GUser_convert_C.so"); // load and compile GUser class
   
-  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1198.dat.18Feb14_17h26m06s");
+  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1238.dat.26Feb14_21h26m57s");
   file->Open();
   
   string input_file(file->GetDeviceName());
@@ -21,9 +21,10 @@
   file->Rewind();
   
   //  a->SetTTreeMode(1, "/scratch/gypaos/data/testCOFEE/root/run_0002_test.root");
-  a->SetTTreeMode(3, "run_1198.root");
+  a->SetTTreeMode(1, "/data/e628X/e628/acquisition/run_root/run_1238.root");
   //a->SetTTreeMode(3, "/data/e628X/e628/acquisition/run_root/run_1193.root");
   cout << "======== Debug START DoRun() =========" << endl;
+  cout << " SHIT HAPPENS!!" << endl;
   a->SetRunNumber(runnumber);
   a->DoRun();
   cout << "======== Debug END DoRun() =========" << endl;
@@ -31,7 +32,7 @@
   
   //  file->Close();
   a->EndUser();                       // must be explicitly called , if it needs
- a->SpeSave("hist_1198.root");   // save all declared histogram
+ a->SpeSave("hist_1238.root");   // save all declared histogram
                                      //  delete (a);                         // finish
   
   // gROOT->ProcessLine(".q");
