@@ -13,9 +13,9 @@
 //GTape *file = new GTape("../run/run_1255.dat.27Feb14_21h41m00s");
 
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
- GTape *file = new GTape("../run/run_1209.dat.24Feb14_19h24m07s");
+ //GTape *file = new GTape("../run/run_1209.dat.24Feb14_19h24m07s");
 
-//  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1209.dat.24Feb14_19h24m07s");
+  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1209.dat.24Feb14_19h24m07s");
 
   file->Open();
   file->Rewind();
