@@ -119,7 +119,9 @@ void GUser::Init(string NPToolArgument){
   // If you want to add more stuff not dealed with NPTool this is the place //
   fDetectorManager->AddDetector("ModularLabel");
   fDetectorManager->AddDetector("Trigger");
-
+  TModularLabel* ML = (TModularLabel*) fDetectorManager->GetDetector("ModularLabel");
+  ML->LoadLabel("ModularLabel.txt");
+ 
   ////////////////////////////////////////////////////////////////////////////
   // connect data objects to the physics
   // need to be done detector by detector
@@ -190,11 +192,12 @@ void GUser::InitUserRun(){
   // Initialisation for user treatemeant for each  run  
   // For specific user treatement
   cout << "Init User Run" << endl;
-  TModularLabel* ML = (TModularLabel*) fDetectorManager->GetDetector("ModularLabel");
-  ML->LoadLabel("ModularLabel.txt");
-   
+  
   fDetectorManager->Init(GetEvent()->GetDataParameters());
 
+  // Sadly this as to be done by hand here for the Modular label:
+   fDetectorManager-> GetDetector("ModularLabel")->InitBranch(fTheTree);
+ 
   // keep track of read labels
   ofstream out_rej,out_acc;
   out_acc.open("label_accepted.dat");
