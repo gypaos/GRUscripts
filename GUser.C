@@ -196,6 +196,7 @@ void GUser::InitUserRun(){
   fDetectorManager->Init(GetEvent()->GetDataParameters());
 
   // Sadly this as to be done by hand here for the Modular label:
+ if(fTheTree) 
    fDetectorManager-> GetDetector("ModularLabel")->InitBranch(fTheTree);
  
   // keep track of read labels
