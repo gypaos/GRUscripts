@@ -33,6 +33,10 @@
 #include "TCATSPhysics.h"
 #include "TCharissaPhysics.h"
 #include "TExogamPhysics.h"
+#include "TSiLiPhysics.h" 
+#include "TSiResPhysics.h" 
+#include "TLaBr3Physics.h" 
+
 // GANIL2ROOT
 #include "TModularLabel.h" 
 #include "TMust2.h"   
@@ -45,6 +49,9 @@
 #include "TTiaraHyball.h"   
 #include "TTiaraBarrel.h"  
 #include "TCharissa.h" 
+#include "TSiLi.h" 
+#include "TSiRes.h" 
+#include "TLaBr3.h" 
 
 // C++ headers
 #include <iostream>
@@ -142,6 +149,15 @@ void GUser::Init(string NPToolArgument){
 
   TExogam* Exogam = (TExogam*) fDetectorManager->GetDetector("EXOGAM");
   ((TExogamPhysics*) fMyDetector->GetDetector("EXOGAM"))->SetRawDataPointer(Exogam->GetExogamData());
+
+  TSiLi* SiLi = (TSiLi*) fDetectorManager->GetDetector("SiLi");
+  ((TSiLiPhysics*) fMyDetector->GetDetector("SiLi"))->SetRawDataPointer(SiLi->GetSiLiData());
+
+  TSiRes* SiRes = (TSiRes*) fDetectorManager->GetDetector("SiRes");
+  ((TSiResPhysics*) fMyDetector->GetDetector("SiRes"))->SetRawDataPointer(SiRes->GetSiResData());
+
+  TLaBr3* LaBr3 = (TLaBr3*) fDetectorManager->GetDetector("LaBr3");
+  ((TLaBr3Physics*) fMyDetector->GetDetector("LaBr3"))->SetRawDataPointer(LaBr3->GetLaBr3Data());
 
 }
 
