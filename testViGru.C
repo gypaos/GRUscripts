@@ -15,12 +15,16 @@
 // GTape *file = new GTape("../e628_run/run_1168.dat.22Dec13_00h51m18s"); 
  //GTape *file = new GTape("../run/run_1209.dat.24Feb14_19h24m07s");
 
-  GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1209.dat.24Feb14_19h24m07s");
+  //GTape *file = new GTape("/data/e628X/e628/acquisition/run/run_1209.dat.24Feb14_19h24m07s");
+  //GTape *file = new GTape("/data/elabodecX/adcval/acquisition/run/run_0011.dat.13Mar14_11h01m06s");
+ //GTape *file = new GTape("/data/elabodecX/adcval/acquisition/run/run_0012.dat.13Mar14_11h06m00s");
+  GTape *file = new GTape("/data/elabodecX/adcval/acquisition/run/run_0013.dat.13Mar14_11h07m43s");
+
 
   file->Open();
   file->Rewind();
   // define GUser
-  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O run_phy/testGRU5");
+  GUser *a = new GUser(file,"-D ./detector.txt  -C calibration.txt -GH -O test");
   a->EventInit();
  // a->SetSpectraMode(1);
   a->InitUser();
@@ -32,8 +36,8 @@
   a->SetCompressionLevel(1);
 
   // define GNetServerRoot to be able to connect vigru
-// GNetServerRoot *serv = new GNetServerRoot(2001, a);
-//  serv->StartServer();
+ GNetServerRoot *serv = new GNetServerRoot(2001, a);
+  serv->StartServer();
  
 
   // Convert  Run //
