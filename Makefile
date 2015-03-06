@@ -2,10 +2,6 @@
 # This Makefile shows nicely how to compile and link applications
 include $(GANIL2ROOT)/libs/Makefile.arch
 
-
-
-#CLASSNAME    := GUser_convert
-CLASSNAME    := GUser
 GUSERDIR     := ./
 
 G2RLIB       := $(GANIL2ROOT)/libs/
@@ -17,10 +13,12 @@ GSOAPDIR     := $(GRUDIR)/gsoap/
 MFM_DIR      := $(GRUDIR)/MFMlib/
 GRUFLAGS     := -I$(GRUDIR)/include/ -I$(LIBDIR) -I$(VIGRUDIR) -I$(GTDIR) -I$(GGRUDIR) -I$(GSOAPDIR) -I$(MFM_DIR) -I$(G2RLIB) -I$(NPTOOL)/NPLib/include/
 INCLIST      := General.h GAcq.h GDevice.h
-
+SYSLIBS      := -L$(GRUDIR)/lib -lGRU
+SYSLIBS      += `$(NPTOOL)/NPLib/liblist`
+SYSLIBS      += -L$(GANIL2ROOT)/libs -lG2rCATS -lG2rCharissa -lG2rChateauCristal -lG2rChio_an -lG2rChio_dig -lG2rDetector -lG2rExl -lG2rExogam -lG2rLaBr3 -lG2rLise -lG2rLiseData -lG2rMaya -lG2rModularLabel -lG2rMust2 -lG2rPlastic -lG2rS1 -lG2rSSSD -lG2rSiLi -lG2rSiRes -lG2rSpegCHIO -lG2rSpegDC -lG2rSpegPlastic -lG2rTiaraBarrel -lG2rTiaraHyball -lG2rTrigger -lG2rVamosCHIO -lG2rVamosDC -lG2rVamosFinger -lG2rVamosPlastic
 # Extensions des fichiers
 ObjSuf        = o
-SrcSuf        = C
+SrcSuf        = cxx
 ExeSuf        =
 DllSuf        = so
 OutPutOpt     = -o 
@@ -38,17 +36,27 @@ GLIBS         = $(ROOTGLIBS) $(SYSLIBS)
 CINTOPTFLAGS  = -O0
 
 #------------------------------------------------------------------------------
-SHARELIB      = $(CLASSNAME)_C.so 
-all:            $(SHARELIB)
+SHARELIB      = libGUser_online.so libGUser_convert.so
+MAIN          = Analysis
+all:            $(SHARELIB) $(MAIN)
 #------------------------------------------------------------------------------
 
-$(CLASSNAME)_C.so: $(CLASSNAME).o   $(CLASSNAME)Dict.o
+Analysis:	Analysis.o libGUser_convert.so
+	$(LD) $^ $(OutPutOpt) $@ -L./ -lGUser_convert $(LIBS) 
+
+libGUser_online.so: GUser_online.o   GUser_onlineDict.o
 		$(LD) $(SOFLAGS) $^ $(OutPutOpt) $@
 
-$(CLASSNAME)Dict.C:	$(CLASSNAME).h
+GUser_onlineDict.cxx:	GUser_online.h
 			@echo "Generating dictionary $@..."
-			rootcint -f $@ -c -p $(CINTOPTFLAGS) $(GRUFLAGS) $(INCLIST) $^ $(CLASSNAME)LinkDef.h
+			rootcint -f $@ -c -p $(CINTOPTFLAGS) $(GRUFLAGS) $(INCLIST) $^ GUserLinkDef.h
 
+libGUser_convert.so: GUser_convert.o   GUser_convertDict.o
+		$(LD) $(SOFLAGS) $^ $(OutPutOpt) $@
+
+GUser_convertDict.cxx:	GUser_convert.h
+			@echo "Generating dictionary $@..."
+			rootcint -f $@ -c -p $(CINTOPTFLAGS) $(GRUFLAGS) $(INCLIST) $^ GUserLinkDef.h
 
 clean:
 	@rm -f core *~ *.o *Dict* 
@@ -59,9 +67,9 @@ distclean:
 .SUFFIXES: .$(SrcSuf)
 
 ###
-
 .$(SrcSuf).$(ObjSuf):
 	$(CXX) $(CXXFLAGS) -c $<
 
 # dependances
 $(CLASSNAME).o:	$(CLASSNAME).C	 $(CLASSNAME).h
+$(MAIN).o:	$(MAIN).cxx	 $(MAIN).h

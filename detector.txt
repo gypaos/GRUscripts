@@ -57,41 +57,36 @@ SI=   1
 SILI= 1     
 CSI=  1     
 VIS=  all      
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%         
-TiaraHyball
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 0
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 60
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 120
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 180
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 240
-TiaraHyballWedge
-   Z= -147
-   R= 0
-   Phi= 300
-%%%%%%%%%%%%%%%%%%%%%%%%%%%         
-TiaraBarrel
-   X= 0
-   Y= 0
-   Z= 0
-   OuterBarrel= 1
-   InnerBarrel= 1
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Tiara
+  TiaraInnerBarrel= 1
+  TiaraOuterBarrel= 1
+  TiaraChamber= 1
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 0
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 60
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 120
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 180
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 240
+  TiaraHyballWedge
+    Z= -147
+    R= 0
+    Phi= 300
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%      
 CharissaArray
 CharissaTelescope          

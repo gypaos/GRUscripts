@@ -22,44 +22,25 @@
 #ifndef __GUser__
 #define __GUser__
 
-#include <sstream>
-using std::ostream;
-
+// ROOT headers
 #include <TObject.h>
+#include <TRint.h>
+#include <TString.h>
+
+// GRU headers
 #include "General.h"
 #include "GAcq.h"
 #include "GDevice.h"
-
-#include <TRint.h>
-#include <TObject.h>
-#include <TString.h>
 #include "GParaCaliXml.h"
 #include "GNetServerRoot.h"
 
-#include "TDetector.h"
-#include "TMust2.h"
-#include "TCATS.h"
-#include "TSSSD.h"
-#include "TExogam.h"
-#include "TMaya.h"
-#include "TTrigger.h"
-#include "TTac.h"
-#include "TPlastic.h"
-#include "TChio_an.h"
-#include "TChio_dig.h"
-#include "TLise.h"
-#include "TTiaraHyball.h"
-#include "TTiaraBarrel.h"
-#include "TVamosFinger.h"
-#include "TVamosPlastic.h"
-#include "TVamosCHIO.h"
-#include "TVamosDC.h"
+// NPTool header
+#include "DetectorManager.h"
 
-using namespace std;
+// Ganil2Root headers
+#include "TDetectorManager.h"
 
-
-class GUser : public  GAcq
-{
+class GUser : public  GAcq{
  protected:
 	int fMyLabel;
 	TString fMyParameterName;
@@ -68,28 +49,19 @@ class GUser : public  GAcq
 	GNetServerRoot*   MySpectraServer;
     
  private:
-	TMust2        *fMust2;
-	TCATS	        *fCATS;
-	TSSSD	        *fSSSD;
-   TExogam       *fExogam;
-	TTrigger      *fTrigger;
-	TTac          *fTac;
-	TPlastic      *fPlastic;
-	TChio_an      *fChio_an;
-	TChio_dig     *fChio_dig;
-	TLise         *fLise;
-   TVamosFinger  *fVamosFinger;
-   TVamosPlastic *fVamosPlastic;
-   TVamosCHIO    *fVamosCHIO;
-   TVamosDC      *fVamosDC;
-   TMaya         *fMaya;
-   TTiaraHyball  *fTiaraHyball;
-   TTiaraBarrel  *fTiaraBarrel;
+  G2R::TDetectorManager* fDetectorManager;    
+
+  string fNPToolArgument;
+
+ private:
+   DetectorManager   *fMyDetector;
 
  public:
    GUser(GDevice* _fDevIn= NULL, GDevice* _fDevOut= NULL);  // default constructor of GUser object 
-   ~GUser();                                                // destructor of GUser object 
-
+   GUser(GDevice* _fDevIn, string NPToolOption);  // NPTool specific constructor 
+   ~GUser();// destructor of GUser object 
+   
+   void Init( string NPToolOption);
    virtual void InitUser();
    virtual void InitUserRun();
    virtual void User();
