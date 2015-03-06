@@ -14,7 +14,7 @@ MFM_DIR      := $(GRUDIR)/MFMlib/
 GRUFLAGS     := -I$(GRUDIR)/include/ -I$(LIBDIR) -I$(VIGRUDIR) -I$(GTDIR) -I$(GGRUDIR) -I$(GSOAPDIR) -I$(MFM_DIR) -I$(G2RLIB) -I$(NPTOOL)/NPLib/include/
 INCLIST      := General.h GAcq.h GDevice.h
 SYSLIBS      := -L$(GRUDIR)/lib -lGRU
-SYSLIBS      += `$(NPTOOL)/NPLib/liblist`
+SYSLIBS      += $(shell $(NPTOOL)/NPLib/liblist)
 SYSLIBS      += -L$(GANIL2ROOT)/libs -lG2rCATS -lG2rCharissa -lG2rChateauCristal -lG2rChio_an -lG2rChio_dig -lG2rDetector -lG2rExl -lG2rExogam -lG2rLaBr3 -lG2rLise -lG2rLiseData -lG2rMaya -lG2rModularLabel -lG2rMust2 -lG2rPlastic -lG2rS1 -lG2rSSSD -lG2rSiLi -lG2rSiRes -lG2rSpegCHIO -lG2rSpegDC -lG2rSpegPlastic -lG2rTiaraBarrel -lG2rTiaraHyball -lG2rTrigger -lG2rVamosCHIO -lG2rVamosDC -lG2rVamosFinger -lG2rVamosPlastic
 # Extensions des fichiers
 ObjSuf        = o
