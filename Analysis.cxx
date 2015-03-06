@@ -105,10 +105,13 @@ void AnalyseDirectory(string directory_name,string outdir,bool check){
         filename= directory_name + dname ;
         // make the output file name:
         int M,m;
-        string outname = outdir+FileNameToRootName(filename,M,m)+".root";
+        string outname = FileNameToRootName(filename,M,m)+".root";
         if(outlist.find(outname)==string::npos){
           cout << filename << " " << outdir << endl;
           AnalyseSingleFile(filename,outdir);
+        }
+        else{
+          cout << " File " << filename << " already converted, skipping" << endl;
         }
       }
     }
