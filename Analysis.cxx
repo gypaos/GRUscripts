@@ -126,7 +126,7 @@ string FileNameToRootName(string input_file,int& runnumber_major, int& runnumber
 
   runnumber_major = atoi((input_file.substr(input_file.find("_")+1,input_file.find(".dat.") - input_file.find("_")-1)).c_str());
   if(input_file.find_last_of("s")==input_file.length()-1)
-    runnumber_minor=1;
+    runnumber_minor=0;
   else
     runnumber_minor = atoi((input_file.substr(input_file.find_last_of(".")+1)).c_str());
 
