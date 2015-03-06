@@ -8,6 +8,7 @@ using namespace std;
 
 #include"GTape.h"
 #include"GUser_convert.h"
+#include"General.h"
 int main (int argc, char** argv){
   if(argc!=3){
     cout << "Need two argument: $1:input file or directory $2: directory" << endl;
@@ -59,7 +60,7 @@ void AnalyseSingleFile(string filename,string outdirectory){
   a->InitUser();
   file->Rewind();
 
-  a->SetTTreeMode(TTreeMode::TREE_USER,outputfilename.c_str());
+  a->SetTTreeMode(TREE_USER,outputfilename.c_str());
   a->SetRunNumber(runnumber_major);
   a->DoRun();
   a->EndUser();        
