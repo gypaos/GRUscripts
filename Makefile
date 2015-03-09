@@ -1,5 +1,6 @@
 # Makefile for the ROOT test programs.
 # This Makefile shows nicely how to compile and link applications
+SHELL := /bin/bash
 include $(GANIL2ROOT)/libs/Makefile.arch
 
 GUSERDIR     := ./
@@ -33,7 +34,7 @@ CXXFLAGS     +=  $(ROOTCFLAGS) $(GRUFLAGS) $(OPTFLAGS)
 LIBS          = $(ROOTLIBS)  $(SYSLIBS)
 GLIBS         = $(ROOTGLIBS) $(SYSLIBS)
 
-CINTOPTFLAGS  = -O0
+CINTOPTFLAGS  = -O3
 
 #------------------------------------------------------------------------------
 SHARELIB      = libGUser_online.so libGUser_convert.so
@@ -41,7 +42,7 @@ MAIN          = Analysis
 all:            $(SHARELIB) $(MAIN)
 #------------------------------------------------------------------------------
 
-Analysis:	Analysis.o libGUser_convert.so
+Analysis:	Analysis.o
 	$(LD) $^ $(OutPutOpt) $@ -L./ -lGUser_convert $(LIBS) 
 
 libGUser_online.so: GUser_online.o   GUser_onlineDict.o
@@ -71,5 +72,6 @@ distclean:
 	$(CXX) $(CXXFLAGS) -c $<
 
 # dependances
+Analysis: Analysis.o  libGUser_convert.so 
 $(CLASSNAME).o:	$(CLASSNAME).C	 $(CLASSNAME).h
 $(MAIN).o:	$(MAIN).cxx	 $(MAIN).h
