@@ -16,9 +16,9 @@ Analysis: Analysis.o libGUser_convert.so
 	 $(LD) $(LDFLAGS) $^ $(LIBS) $(LIBRARY) $(OutPutOpt) $@
 
 GUser_convertDict.cxx: GUser_convert.h
-			rootcint -f $@ -c $^ $(INCLUDE) GUserLinkDef.h
+			rootcint -f $@ -c -p $^ $(INCLUDE) GUserLinkDef.h
 GUser_onlineDict.cxx: GUser_online.h
-			rootcint -f $@ -c $^ $(INCLUDE) GUserLinkDef.h
+			rootcint -f $@ -c -p $^ $(INCLUDE) GUserLinkDef.h
 
 
 # dependances
