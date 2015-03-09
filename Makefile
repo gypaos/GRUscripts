@@ -30,7 +30,7 @@ ROOTLIBS     := $(shell root-config --libs) -lHtml -lSpectrum
 ROOTGLIBS    := $(shell root-config --glibs)
 OPTFLAGS      = -O3
 
-CXXFLAGS     +=  $(ROOTCFLAGS) $(GRUFLAGS) $(OPTFLAGS) 
+CXXFLAGS     +=  $(ROOTCFLAGS) --no-as-needed $(GRUFLAGS) $(OPTFLAGS) 
 LIBS          = $(ROOTLIBS)  $(SYSLIBS)
 GLIBS         = $(ROOTGLIBS) $(SYSLIBS)
 
