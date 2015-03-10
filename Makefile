@@ -13,12 +13,12 @@ libGUser_online.so: GUser_online.o GUser_onlineDict.o
 	$(LD) $(SOFLAGS) $^ $(LIBRARY) $(OutPutOpt) $@
 
 Analysis: Analysis.o libGUser_convert.so
-	 $(LD) $(LDFLAGS) $^ $(LIBS) $(LIBRARY) $(OutPutOpt) $@
+	 $(LD) $(LDFLAGS) $^ $(LIBS) $(LIBRARY) -L./ -lGUser_convert $(OutPutOpt) $@
 
 GUser_convertDict.cxx: GUser_convert.h
-			rootcint -f $@ -c -p $^ $(INCLUDE) GUserLinkDef.h
+			rootcint -f $@ -c -p $(INCLUDE) $^ GUserLinkDef.h
 GUser_onlineDict.cxx: GUser_online.h
-			rootcint -f $@ -c -p $^ $(INCLUDE) GUserLinkDef.h
+			rootcint -f $@ -c -p $(INCLUDE) $^ GUserLinkDef.h
 
 
 # dependances

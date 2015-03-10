@@ -272,4 +272,4 @@ G2RFLAGS := -I$(GANIL2ROOT)/libs
 INCLUDE		= $(GRUFLAGS) -I$(CLHEP_BASE_DIR)/include -I$(NPTOOL)/NPLib/include $(G2RFLAGS) 
 LIBRARY = `$(NPTOOL)/NPLib/liblist`
 LIBRARY += -L$(GRUDIR)/lib -lGRU  
-LIBRARY += -L$(GANIL2ROOT)/libs -lG2rCATS -lG2rCharissa -lG2rChateauCristal -lG2rChio_an -lG2rChio_dig -lG2rDetector -lG2rExl -lG2rExogam -lG2rLaBr3 -lG2rLise -lG2rLiseData -lG2rMaya -lG2rModularLabel -lG2rMust2 -lG2rPlastic -lG2rS1 -lG2rSSSD -lG2rSiLi -lG2rSiRes -lG2rSpegCHIO -lG2rSpegDC -lG2rSpegPlastic -lG2rTiaraBarrel -lG2rTiaraHyball -lG2rTrigger -lG2rVamosCHIO -lG2rVamosDC -lG2rVamosFinger -lG2rVamosPlastic -L./ -lGUser_convert 
+LIBRARY += -L$(GANIL2ROOT)/libs -lG2rCATS -lG2rCharissa -lG2rChateauCristal -lG2rChio_an -lG2rChio_dig -lG2rDetector -lG2rExl -lG2rExogam -lG2rLaBr3 -lG2rLise -lG2rLiseData -lG2rMaya -lG2rModularLabel -lG2rMust2 -lG2rPlastic -lG2rS1 -lG2rSSSD -lG2rSiLi -lG2rSiRes -lG2rSpegCHIO -lG2rSpegDC -lG2rSpegPlastic -lG2rTiaraBarrel -lG2rTiaraHyball -lG2rTrigger -lG2rVamosCHIO -lG2rVamosDC -lG2rVamosFinger -lG2rVamosPlastic 
